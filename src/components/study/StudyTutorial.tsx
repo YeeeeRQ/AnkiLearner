@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowUturnLeftIcon, 
-  HandThumbUpIcon, 
-  CheckCircleIcon, 
-  XCircleIcon 
+  ArrowUturnLeftIcon
 } from '@heroicons/react/24/outline';
 
 const TUTORIAL_KEY = 'anki-learner-study-tutorial-seen';

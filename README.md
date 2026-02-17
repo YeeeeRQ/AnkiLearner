@@ -83,7 +83,6 @@ MIT License
 
 ### Acknowledgements
 
-- Inspired by [the original project](https://github.com/Kaiyiwing/qwerty-learner)
 - Dictionary data provided by the open-source community
 
 ---
@@ -129,8 +128,8 @@ MIT License
 
 1. 克隆仓库:
    ```bash
-   git clone https://github.com/yourusername/qwerty-learner-article.git
-   cd qwerty-learner-article
+   git clone https://github.com/yeeerq/AnkiLearner.git
+   cd AnkiLearner
    ```
 
 2. 安装依赖:
@@ -166,8 +165,3 @@ MIT License
 ### 许可证
 
 MIT License
-
-### 致谢
-
-- 灵感来源于 [Qwerty Learner](https://github.com/Kaiyiwing/qwerty-learner)
-- 词典数据由开源社区提供
