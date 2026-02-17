@@ -3,6 +3,7 @@ import { db, type Card } from '../db'
 export interface DictWord {
   front: string
   back: string
+  phonetic?: string
   note?: string
 }
 
@@ -29,6 +30,7 @@ export async function fetchAndImportDeck(url: string, deckName: string, descript
       deckId,
       front: w.front,
       back: w.back,
+      phonetic: w.phonetic,
       note: w.note || '',
       state: 'new',
       step: 0,
