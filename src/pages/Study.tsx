@@ -154,7 +154,7 @@ export default function Study() {
           const isPreview = previewMode === 'prev';
           return (
             <div 
-              className={`absolute left-1/2 top-1/2 transition-all duration-300 ease-out select-none ${isPreview ? 'z-30 opacity-100 cursor-zoom-out' : 'z-0 opacity-60 cursor-pointer pointer-events-auto'}`}
+              className={`absolute left-1/2 top-1/2 transition-all duration-300 ease-out select-none rounded-3xl overflow-hidden ${isPreview ? 'z-30 opacity-100 cursor-zoom-out' : 'z-0 opacity-60 cursor-pointer pointer-events-auto'}`}
               style={{
                 width: cardSize.width,
                 height: cardSize.height,
@@ -192,7 +192,7 @@ export default function Study() {
           const isPreview = previewMode === 'next';
           return (
             <div 
-              className={`absolute left-1/2 top-1/2 transition-all duration-300 ease-out select-none ${isPreview ? 'z-30 opacity-100 cursor-zoom-out' : 'z-0 opacity-60 cursor-pointer pointer-events-auto'}`}
+              className={`absolute left-1/2 top-1/2 transition-all duration-300 ease-out select-none rounded-3xl overflow-hidden ${isPreview ? 'z-30 opacity-100 cursor-zoom-out' : 'z-0 opacity-60 cursor-pointer pointer-events-auto'}`}
               style={{
                 width: cardSize.width,
                 height: cardSize.height,
