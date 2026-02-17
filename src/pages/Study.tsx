@@ -241,7 +241,14 @@ export default function Study() {
           isDebug={isDebug}
           speak={speak}
           dragValues={{ x, y, rotate, opacity }}
-          dragHandlers={enableDrag ? { onDrag: handleDrag, onDragEnd: handleDragEnd } : { onDrag: () => {}, onDragEnd: () => {} }}
+          dragHandlers={{ 
+            onDrag: (e, info) => {
+              if (enableDrag && isFlipped) handleDrag(e, info)
+            }, 
+            onDragEnd: () => {
+              if (enableDrag && isFlipped) handleDragEnd()
+            } 
+          }}
           width={cardSize.width}
           height={cardSize.height}
           enableDrag={enableDrag}

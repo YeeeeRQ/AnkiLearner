@@ -89,14 +89,14 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
         className="w-full h-full touch-none focus:outline-none relative"
         key={currentCard.id}
         style={{ x, y, rotate, opacity }}
-        drag={enableDrag}
+        drag
         dragConstraints={{ left: -3000, right: 3000, top: -3000, bottom: 3000 }}
         dragSnapToOrigin
         dragElastic={1}
         dragMomentum={false}
         onDrag={dragHandlers.onDrag}
         onDragEnd={dragHandlers.onDragEnd}
-        whileTap={enableDrag ? { cursor: "grabbing" } : undefined}
+        whileTap={{ cursor: "grabbing" }}
       >
         <DebugOverlay isDebug={isDebug} />
         
