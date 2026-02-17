@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai'
 import { pronunciationConfigAtom, soundEffectVolumeAtom } from '../state'
+import Select from '../components/Select'
 
 export default function Settings() {
   const [pronunciationConfig, setPronunciationConfig] = useAtom(pronunciationConfigAtom)
@@ -16,14 +17,15 @@ export default function Settings() {
         <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">
             <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">发音类型</label>
-            <select
+            <Select
               value={pronunciationConfig.type}
-              onChange={(e) => setPronunciationConfig({ ...pronunciationConfig, type: e.target.value as any })}
-              className="ml-4 block w-40 rounded-md border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm text-neutral-900 dark:text-neutral-100"
-            >
-              <option value="us">美式 (US)</option>
-              <option value="uk">英式 (UK)</option>
-            </select>
+              onChange={(value) => setPronunciationConfig({ ...pronunciationConfig, type: value as any })}
+              options={[
+                { value: 'us', label: '美式 (US)' },
+                { value: 'uk', label: '英式 (UK)' }
+              ]}
+              className="ml-4 w-40"
+            />
           </div>
           <div className="flex items-center justify-between">
             <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">发音音量</label>
