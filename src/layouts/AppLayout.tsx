@@ -38,10 +38,10 @@ export default function AppLayout() {
   return (
     <div className={cls(
       "min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 transition-colors duration-300 overflow-x-hidden",
-      isStudyPage && "h-screen overflow-hidden"
+      isStudyPage ? "h-screen overflow-hidden" : "pt-14"
     )}>
       {!isStudyPage && (
-      <header className="sticky top-0 z-10 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md">
+      <header className="fixed top-0 w-full z-20 border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 h-14">
           <div className="font-bold text-base sm:text-lg tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent truncate max-w-[120px] sm:max-w-none">
             Anki Learner
