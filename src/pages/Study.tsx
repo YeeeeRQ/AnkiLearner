@@ -82,7 +82,6 @@ export default function Study() {
 
   if (loading) return (
     <>
-      <StudyTutorial />
       <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">加载中...</div>
     </>
   )
@@ -90,7 +89,6 @@ export default function Study() {
   if (!currentCard && !showComplete) {
     return (
       <>
-        <StudyTutorial />
         <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
           <div className="text-2xl font-bold text-green-500 dark:text-green-400">今日任务已完成！</div>
           <div className="text-neutral-500 dark:text-neutral-400">该牌组暂时没有需要复习的卡片。</div>
@@ -102,21 +100,15 @@ export default function Study() {
     )
   }
 
-  // Handle completion state properly even if currentCard is null
   if (showComplete) {
     return (
       <>
-        <StudyTutorial />
-        <AlertDialog
-          isOpen={showComplete}
-          onClose={() => navigate('/')}
-          title="恭喜！"
-          message="你已完成今日的复习任务。"
-          type="success"
-          confirmText="返回首页"
-        />
         <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-          <div className="text-2xl font-bold text-green-500 dark:text-green-400">今日任务已完成！</div>
+          <div className="text-2xl font-bold text-green-500 dark:text-green-400">太棒了！</div>
+          <div className="text-neutral-500 dark:text-neutral-400">你已经完成了本组卡片的复习。</div>
+          <Link to="/" className="bg-blue-600 px-6 py-2 rounded text-white hover:bg-blue-700 transition">
+            返回首页
+          </Link>
         </div>
       </>
     )

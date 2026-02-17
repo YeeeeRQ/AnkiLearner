@@ -5,18 +5,22 @@ import Stats from './pages/Stats'
 import Settings from './pages/Settings'
 import DeckDetail from './pages/DeckDetail'
 import Study from './pages/Study'
+import { StudyTutorial } from './components/study/StudyTutorial'
 
 export default function AppRouter() {
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<Home />} />
-        <Route path="deck/:id" element={<DeckDetail />} />
-        <Route path="deck/:id/study" element={<Study />} />
-        <Route path="study" element={<Study />} />
-        <Route path="stats" element={<Stats />} />
-        <Route path="settings" element={<Settings />} />
-      </Route>
-    </Routes>
+    <>
+      <StudyTutorial />
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<Home />} />
+          <Route path="deck/:id" element={<DeckDetail />} />
+          <Route path="deck/:id/study" element={<Study />} />
+          <Route path="study" element={<Study />} />
+          <Route path="stats" element={<Stats />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
