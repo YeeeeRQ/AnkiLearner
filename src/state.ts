@@ -33,3 +33,6 @@ const isMobile = typeof window !== 'undefined' && (/Android|webOS|iPhone|iPad|iP
 // Show difficulty buttons config
 // Default to hidden on mobile, visible on desktop
 export const showDifficultyButtonsAtom = atomWithStorage<boolean>('show-difficulty-buttons', !isMobile)
+
+// Tutorial visibility
+export const showTutorialAtom = atom<boolean>(false)

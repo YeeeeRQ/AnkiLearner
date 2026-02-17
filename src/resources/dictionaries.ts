@@ -27,5 +27,12 @@ export const dictionaries: DictionaryResource[] = [
     description: '雅思核心词汇',
     url: `${import.meta.env.BASE_URL}dicts/IELTS_T.json`,
     length: 58
+  },
+  {
+    id: 'long-words',
+    name: 'Long Words',
+    description: '常见长难词汇 (测试用)',
+    url: `${import.meta.env.BASE_URL}dicts/long-words.json`,
+    length: 20
   }
 ]

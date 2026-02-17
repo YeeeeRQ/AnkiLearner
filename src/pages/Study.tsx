@@ -80,17 +80,25 @@ export default function Study() {
     return () => window.removeEventListener('resize', updateSize)
   }, [])
 
-  if (loading) return <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">加载中...</div>
+  if (loading) return (
+    <>
+      <StudyTutorial />
+      <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">加载中...</div>
+    </>
+  )
 
   if (!currentCard && !showComplete) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="text-2xl font-bold text-green-500 dark:text-green-400">今日任务已完成！</div>
-        <div className="text-neutral-500 dark:text-neutral-400">该牌组暂时没有需要复习的卡片。</div>
-        <Link to="/" className="bg-blue-600 px-6 py-2 rounded text-white hover:bg-blue-700 transition">
-          返回首页
-        </Link>
-      </div>
+      <>
+        <StudyTutorial />
+        <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+          <div className="text-2xl font-bold text-green-500 dark:text-green-400">今日任务已完成！</div>
+          <div className="text-neutral-500 dark:text-neutral-400">该牌组暂时没有需要复习的卡片。</div>
+          <Link to="/" className="bg-blue-600 px-6 py-2 rounded text-white hover:bg-blue-700 transition">
+            返回首页
+          </Link>
+        </div>
+      </>
     )
   }
 
@@ -98,6 +106,7 @@ export default function Study() {
   if (showComplete) {
     return (
       <>
+        <StudyTutorial />
         <AlertDialog
           isOpen={showComplete}
           onClose={() => navigate('/')}
@@ -113,7 +122,7 @@ export default function Study() {
     )
   }
 
-  if (!currentCard) return null // Should be handled by loading or completion state
+  if (!currentCard) return <StudyTutorial /> // Should be handled by loading or completion state
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden overscroll-none flex flex-col bg-neutral-50 dark:bg-neutral-900">

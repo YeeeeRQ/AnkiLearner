@@ -1,20 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowUturnLeftIcon
 } from '@heroicons/react/24/outline';
+import { useAtom } from 'jotai';
+import { showTutorialAtom } from '../../state';
 
 const TUTORIAL_KEY = 'anki-learner-study-tutorial-seen';
 
 export function StudyTutorial() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useAtom(showTutorialAtom);
 
   useEffect(() => {
     const hasSeen = localStorage.getItem(TUTORIAL_KEY);
     if (!hasSeen) {
       setIsVisible(true);
     }
-  }, []);
+  }, [setIsVisible]);
 
   const handleDismiss = () => {
     localStorage.setItem(TUTORIAL_KEY, 'true');
@@ -52,7 +54,7 @@ export function StudyTutorial() {
             {/* Top Right - Good */}
             <div className="absolute -top-12 -right-4 flex flex-col items-center text-green-400">
               <ArrowUturnLeftIcon className="w-8 h-8 rotate-[135deg] mb-1 scale-x-[-1]" />
-              <span className="font-bold text-sm">良好 (Good)</span>
+              <span className="font-bold text-sm">一般 (Good)</span>
             </div>
 
             {/* Bottom Left - Again */}
@@ -64,7 +66,7 @@ export function StudyTutorial() {
             {/* Bottom Right - Easy */}
             <div className="absolute -bottom-12 -right-4 flex flex-col items-center text-blue-400">
               <ArrowUturnLeftIcon className="w-8 h-8 rotate-45 mt-1 scale-x-[-1]" />
-              <span className="font-bold text-sm">容易 (Easy)</span>
+              <span className="font-bold text-sm">简单 (Easy)</span>
             </div>
 
             {/* Tap Instruction */}

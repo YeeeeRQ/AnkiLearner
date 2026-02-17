@@ -1,13 +1,16 @@
 import { useAtom } from 'jotai'
-import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom, showDifficultyButtonsAtom } from '../state'
+import { useNavigate } from 'react-router-dom'
+import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom, showDifficultyButtonsAtom, showTutorialAtom } from '../state'
 import Select from '../components/Select'
 import Switch from '../components/Switch'
 
 export default function Settings() {
+  const navigate = useNavigate()
   const [pronunciationConfig, setPronunciationConfig] = useAtom(pronunciationConfigAtom)
   const [soundEffectVolume, setSoundEffectVolume] = useAtom(soundEffectVolumeAtom)
   const [enableDrag, setEnableDrag] = useAtom(enableDragInteractionAtom)
   const [showDifficultyButtons, setShowDifficultyButtons] = useAtom(showDifficultyButtonsAtom)
+  const [, setShowTutorial] = useAtom(showTutorialAtom)
 
   return (
     <div className="max-w-4xl">
@@ -39,6 +42,22 @@ export default function Settings() {
               onChange={setShowDifficultyButtons}
               disabled={!enableDrag}
             />
+          </div>
+
+          <div className="flex items-center justify-between border-t border-neutral-100 dark:border-neutral-700 pt-6">
+            <div>
+              <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">交互帮助</div>
+              <div className="text-xs text-neutral-500 dark:text-neutral-400">查看卡片拖拽交互的使用说明</div>
+            </div>
+            <button
+              onClick={() => {
+                setShowTutorial(true)
+                navigate('/study')
+              }}
+              className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-neutral-100 rounded-lg text-sm font-medium transition-colors"
+            >
+              查看说明
+            </button>
           </div>
         </div>
       </div>

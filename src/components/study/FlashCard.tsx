@@ -140,6 +140,75 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
   )
 }
 
+function AutoResizeText({ text, className, maxFontSize = 48, minFontSize = 16 }: { text: string, className?: string, maxFontSize?: number, minFontSize?: number }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLSpanElement>(null)
+  const [fontSize, setFontSize] = useState(maxFontSize)
+
+  useEffect(() => {
+    const container = containerRef.current
+    const textElement = textRef.current
+    if (!container || !textElement) return
+
+    const checkOverflow = () => {
+      // Start from maxFontSize
+      let low = minFontSize
+      let high = maxFontSize
+      let bestSize = minFontSize
+      
+      // Calculate max width allowed (100% of container)
+      const maxWidth = container.offsetWidth
+
+      // Binary search for optimal size
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2)
+        textElement.style.fontSize = `${mid}px`
+        
+        // Use scrollWidth to detect if text overflows container width
+        // Use a small buffer (e.g. 4px) to prevent edge case jitter
+        if (textElement.scrollWidth <= maxWidth) {
+          bestSize = mid
+          low = mid + 1
+        } else {
+          high = mid - 1
+        }
+      }
+      
+      setFontSize(bestSize)
+      // Reset to best size for display
+      textElement.style.fontSize = `${bestSize}px`
+    }
+
+    checkOverflow()
+    
+    // Optional: Re-check on window resize with debounce
+    let timeoutId: any
+    const resizeObserver = new ResizeObserver(() => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(checkOverflow, 100)
+    })
+    resizeObserver.observe(container)
+    
+    return () => {
+      resizeObserver.disconnect()
+      clearTimeout(timeoutId)
+    }
+  }, [text, maxFontSize, minFontSize])
+
+  return (
+    <div ref={containerRef} className={`w-full flex justify-center overflow-hidden ${className}`}>
+      <span 
+        ref={textRef} 
+        style={{ fontSize: `${fontSize}px`, whiteSpace: 'nowrap', display: 'inline-block' }}
+        // Removed transition-all to prevent animation loop interference with measurement
+        // Removed duration-200 to eliminate any potential layout shift animation
+      >
+        {text}
+      </span>
+    </div>
+  )
+}
+
 function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard: Card, speak: (text: string) => void, isBack: boolean, skin: CardSkin, phonetic?: string }) {
   return (
     <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col overflow-hidden relative ${skin.bgClass} ${skin.borderClass}`}>
@@ -155,12 +224,15 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard:
       </div>
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6 z-10 ${skin.textClass}`}>
+      <div className={`flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6 z-10 ${skin.textClass} w-full`}>
         {/* Primary Text (Word/Question) */}
-        <div className="space-y-4 w-full">
-          <h2 className="text-4xl font-bold tracking-tight leading-tight break-words">
-            {currentCard.front}
-          </h2>
+        <div className="space-y-4 w-full flex flex-col items-center">
+          <AutoResizeText 
+            text={currentCard.front} 
+            className="font-bold tracking-tight leading-tight"
+            maxFontSize={48}
+            minFontSize={20}
+          />
 
           {/* Phonetic Symbol */}
           {phonetic && (

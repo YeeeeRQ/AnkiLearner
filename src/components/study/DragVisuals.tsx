@@ -30,8 +30,23 @@ export function DragPathVisual({ dragPath, highlightedRating }: DragVisualsProps
   const ratingInfo = highlightedRating ? getRatingInfo(highlightedRating) : null
   const showRating = !isCancelled && ratingInfo
 
+  const LINE_LENGTH = 120
+  const QUADRANT_COLOR = "rgba(156, 163, 175, 0.3)" // neutral-400 with opacity
+
   return (
     <svg className="fixed inset-0 pointer-events-none z-50 overflow-visible">
+      {/* Quadrant Lines */}
+      <g stroke={QUADRANT_COLOR} strokeWidth="1" strokeDasharray="4 4">
+        {/* Top Right (Good) */}
+        <line x1={dragPath.start.x} y1={dragPath.start.y} x2={dragPath.start.x + LINE_LENGTH} y2={dragPath.start.y - LINE_LENGTH} />
+        {/* Bottom Right (Easy) */}
+        <line x1={dragPath.start.x} y1={dragPath.start.y} x2={dragPath.start.x + LINE_LENGTH} y2={dragPath.start.y + LINE_LENGTH} />
+        {/* Bottom Left (Retry) */}
+        <line x1={dragPath.start.x} y1={dragPath.start.y} x2={dragPath.start.x - LINE_LENGTH} y2={dragPath.start.y + LINE_LENGTH} />
+        {/* Top Left (Hard) */}
+        <line x1={dragPath.start.x} y1={dragPath.start.y} x2={dragPath.start.x - LINE_LENGTH} y2={dragPath.start.y - LINE_LENGTH} />
+      </g>
+
       {/* Center Zone */}
       <g>
         <circle 

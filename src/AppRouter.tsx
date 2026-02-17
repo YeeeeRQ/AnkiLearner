@@ -13,6 +13,7 @@ export default function AppRouter() {
         <Route index element={<Home />} />
         <Route path="deck/:id" element={<DeckDetail />} />
         <Route path="deck/:id/study" element={<Study />} />
+        <Route path="study" element={<Study />} />
         <Route path="stats" element={<Stats />} />
         <Route path="settings" element={<Settings />} />
       </Route>
