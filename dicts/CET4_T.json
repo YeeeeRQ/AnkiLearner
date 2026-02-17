@@ -1,32 +1,182 @@
 [
-  { "front": "abandon", "back": "v. 抛弃，放弃", "note": "CET-4" },
-  { "front": "ability", "back": "n. 能力；能耐，本领", "note": "CET-4" },
-  { "front": "aboard", "back": "ad. 在船(车)上；上船", "note": "CET-4" },
-  { "front": "absolute", "back": "a. 绝对的；纯粹的", "note": "CET-4" },
-  { "front": "absorb", "back": "vt. 吸收；使专心", "note": "CET-4" },
-  { "front": "abstract", "back": "n. 摘要", "note": "CET-4" },
-  { "front": "abundant", "back": "a. 丰富的；大量的", "note": "CET-4" },
-  { "front": "abuse", "back": "vt. 滥用；虐待 n. 滥用", "note": "CET-4" },
-  { "front": "academic", "back": "a. 学院的；学术的", "note": "CET-4" },
-  { "front": "academy", "back": "n. 私立中学；专科院校", "note": "CET-4" },
-  { "front": "accelerate", "back": "vt. (使)加快；促进", "note": "CET-4" },
-  { "front": "accent", "back": "n. 口音，腔调；重音", "note": "CET-4" },
-  { "front": "acceptable", "back": "a. 可接受的，合意的", "note": "CET-4" },
-  { "front": "acceptance", "back": "n. 接受，验收；承认", "note": "CET-4" },
-  { "front": "access", "back": "n. 接近；通道，入口", "note": "CET-4" },
-  { "front": "accessory", "back": "n. 同谋，从犯；附件", "note": "CET-4" },
-  { "front": "accident", "back": "n. 意外的；事故", "note": "CET-4" },
-  { "front": "accidental", "back": "a. 偶然的；非本质的", "note": "CET-4" },
-  { "front": "accommodate", "back": "vt. 容纳；供应，供给", "note": "CET-4" },
-  { "front": "accommodation", "back": "n. 招待设备；预定铺位", "note": "CET-4" },
-  { "front": "accompany", "back": "vt. 陪伴，陪同；伴随", "note": "CET-4" },
-  { "front": "accomplish", "back": "vt. 达到(目的)；完成", "note": "CET-4" },
-  { "front": "accord", "back": "vt. 使一致；给予", "note": "CET-4" },
-  { "front": "accordance", "back": "n. 一致；和谐；授予", "note": "CET-4" },
-  { "front": "accordingly", "back": "ad. 因此，所以；照着", "note": "CET-4" },
-  { "front": "account", "back": "n. 记述；解释；帐目", "note": "CET-4" },
-  { "front": "accumulate", "back": "vt. 积累 vi. 堆积", "note": "CET-4" },
-  { "front": "accuracy", "back": "n. 准确(性)；准确度", "note": "CET-4" },
-  { "front": "accurate", "back": "a. 准确的，正确无误的", "note": "CET-4" },
-  { "front": "accuse", "back": "vt. 指责；归咎于", "note": "CET-4" }
+  {
+    "front": "abandon",
+    "back": "v. 抛弃，放弃",
+    "note": "CET-4",
+    "phonetic": "/əˈbæn.dən/"
+  },
+  {
+    "front": "ability",
+    "back": "n. 能力；能耐，本领",
+    "note": "CET-4",
+    "phonetic": "/əˈ.bɪl.ɪ.ti/"
+  },
+  {
+    "front": "aboard",
+    "back": "ad. 在船(车)上；上船",
+    "note": "CET-4",
+    "phonetic": "/əˈbɔːd/"
+  },
+  {
+    "front": "absolute",
+    "back": "a. 绝对的；纯粹的",
+    "note": "CET-4",
+    "phonetic": "/ˈæb.səˌljuːt/"
+  },
+  {
+    "front": "absorb",
+    "back": "vt. 吸收；使专心",
+    "note": "CET-4",
+    "phonetic": "/əbˈsɔːb/"
+  },
+  {
+    "front": "abstract",
+    "back": "n. 摘要",
+    "note": "CET-4",
+    "phonetic": "/ˈæbˌstɹækt/"
+  },
+  {
+    "front": "abundant",
+    "back": "a. 丰富的；大量的",
+    "note": "CET-4",
+    "phonetic": "/əˈbʌn.dn̩t/"
+  },
+  {
+    "front": "abuse",
+    "back": "vt. 滥用；虐待 n. 滥用",
+    "note": "CET-4",
+    "phonetic": "/əˈbjuːs/"
+  },
+  {
+    "front": "academic",
+    "back": "a. 学院的；学术的",
+    "note": "CET-4",
+    "phonetic": "/ˌækəˈdɛmɪk/"
+  },
+  {
+    "front": "academy",
+    "back": "n. 私立中学；专科院校",
+    "note": "CET-4",
+    "phonetic": "/əˈkæd.ə.mi/"
+  },
+  {
+    "front": "accelerate",
+    "back": "vt. (使)加快；促进",
+    "note": "CET-4",
+    "phonetic": "/æk.ˈsɛl.ə.ˌɹeɪt/"
+  },
+  {
+    "front": "accent",
+    "back": "n. 口音，腔调；重音",
+    "note": "CET-4",
+    "phonetic": "/ˈak.sənt/"
+  },
+  {
+    "front": "acceptable",
+    "back": "a. 可接受的，合意的",
+    "note": "CET-4",
+    "phonetic": "/æk.ˈsɛp.tə.bəl/"
+  },
+  {
+    "front": "acceptance",
+    "back": "n. 接受，验收；承认",
+    "note": "CET-4",
+    "phonetic": "/ək.ˈsɛp.təns/"
+  },
+  {
+    "front": "access",
+    "back": "n. 接近；通道，入口",
+    "note": "CET-4",
+    "phonetic": "/ˈæksɛs/"
+  },
+  {
+    "front": "accessory",
+    "back": "n. 同谋，从犯；附件",
+    "note": "CET-4",
+    "phonetic": "/ækˈsɛs(ə)ɹi/"
+  },
+  {
+    "front": "accident",
+    "back": "n. 意外的；事故",
+    "note": "CET-4",
+    "phonetic": "/ˈæk.sə.dənt/"
+  },
+  {
+    "front": "accidental",
+    "back": "a. 偶然的；非本质的",
+    "note": "CET-4",
+    "phonetic": "/ˌæk.sɪ.ˈdɛn.tl̩/"
+  },
+  {
+    "front": "accommodate",
+    "back": "vt. 容纳；供应，供给",
+    "note": "CET-4",
+    "phonetic": "/əˈkɒməˌdeɪt/"
+  },
+  {
+    "front": "accommodation",
+    "back": "n. 招待设备；预定铺位",
+    "note": "CET-4",
+    "phonetic": "/ə.ˌkɒm.ə.ˈdeɪ.ʃən/"
+  },
+  {
+    "front": "accompany",
+    "back": "vt. 陪伴，陪同；伴随",
+    "note": "CET-4",
+    "phonetic": "/ə.ˈkʌm.pə.ni/"
+  },
+  {
+    "front": "accomplish",
+    "back": "vt. 达到(目的)；完成",
+    "note": "CET-4",
+    "phonetic": "/əˈkɐm.plɪʃ/"
+  },
+  {
+    "front": "accord",
+    "back": "vt. 使一致；给予",
+    "note": "CET-4",
+    "phonetic": "/əˈkɔːd/"
+  },
+  {
+    "front": "accordance",
+    "back": "n. 一致；和谐；授予",
+    "note": "CET-4",
+    "phonetic": "/ə.ˈkɔɹd.əns/"
+  },
+  {
+    "front": "accordingly",
+    "back": "ad. 因此，所以；照着",
+    "note": "CET-4",
+    "phonetic": "/əˈkɔː(ɹ).dɪŋ.li/"
+  },
+  {
+    "front": "account",
+    "back": "n. 记述；解释；帐目",
+    "note": "CET-4",
+    "phonetic": "/ə.ˈkaʊnt/"
+  },
+  {
+    "front": "accumulate",
+    "back": "vt. 积累 vi. 堆积",
+    "note": "CET-4",
+    "phonetic": "/əˈkjuːmjʊˌleɪt/"
+  },
+  {
+    "front": "accuracy",
+    "back": "n. 准确(性)；准确度",
+    "note": "CET-4",
+    "phonetic": "[ˈækjʊrəsɪ]"
+  },
+  {
+    "front": "accurate",
+    "back": "a. 准确的，正确无误的",
+    "note": "CET-4",
+    "phonetic": "/ˈæk.jə.ɹɪt/"
+  },
+  {
+    "front": "accuse",
+    "back": "vt. 指责；归咎于",
+    "note": "CET-4",
+    "phonetic": "/əˈkjuːz/"
+  }
 ]
