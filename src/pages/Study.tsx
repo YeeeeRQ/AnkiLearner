@@ -103,34 +103,35 @@ export default function Study() {
   if (!currentCard) return null // Should be handled by loading or completion state
 
   return (
-    <div className="max-w-2xl mx-auto h-full flex flex-col relative overflow-hidden overscroll-none pt-16 pb-8">
-      {/* Drag Path Visualization */}
-      <DragPathVisual dragPath={dragPath} />
+    <div className="fixed inset-0 w-full h-full overflow-hidden overscroll-none">
+      <div className="max-w-2xl mx-auto h-full flex flex-col relative pt-16 pb-8">
+        {/* Drag Path Visualization */}
+        <DragPathVisual dragPath={dragPath} />
 
-      {/* Tutorial Overlay */}
-      <StudyTutorial />
+        {/* Tutorial Overlay */}
+        <StudyTutorial />
 
-      {/* Header (Back & Progress) */}
-      <StudyHeader 
-        queueLength={queue.length}
-        currentCard={currentCard}
-        isDebug={isDebug}
-        debugStatus={debugStatus}
-        onBack={() => navigate(-1)}
-        autoPlayAudio={autoPlayAudio}
-        onToggleAutoPlay={() => setAutoPlayAudio(!autoPlayAudio)}
-      />
+        {/* Header (Back & Progress) */}
+        <StudyHeader 
+          queueLength={queue.length}
+          currentCard={currentCard}
+          isDebug={isDebug}
+          debugStatus={debugStatus}
+          onBack={() => navigate(-1)}
+          autoPlayAudio={autoPlayAudio}
+          onToggleAutoPlay={() => setAutoPlayAudio(!autoPlayAudio)}
+        />
 
-      {/* Card Area */}
-      <div className="relative w-full flex-1">
-        
-        {/* Previous Card (Left) */}
+        {/* Card Area */}
+        <div className="relative w-full flex-1">
+          
+          {/* Previous Card (Left) */}
         {history.length > 0 && (() => {
           const prevCard = history[history.length - 1];
           const prevSkin = getSkinForCard(prevCard.id);
           return (
             <div 
-              className="absolute left-1/2 top-1/2 transform -translate-x-[200px] -translate-y-1/2 -rotate-6 scale-90 opacity-60 pointer-events-none select-none z-0"
+              className="absolute left-1/2 top-[40%] transform -translate-x-[350px] -translate-y-1/2 -rotate-6 scale-90 opacity-60 pointer-events-none select-none z-0"
               style={{
                 ...cardDimensions,
                 maxHeight: dynamicMaxHeight ? Math.min(dynamicMaxHeight, 480) : cardDimensions.maxHeight
@@ -155,7 +156,7 @@ export default function Study() {
           const nextSkin = getSkinForCard(nextCard.id);
           return (
             <div 
-              className="absolute left-1/2 top-1/2 transform translate-x-[200px] -translate-y-1/2 rotate-6 scale-90 opacity-60 pointer-events-none select-none z-0"
+              className="absolute left-1/2 top-[40%] transform translate-x-[350px] -translate-y-1/2 rotate-6 scale-90 opacity-60 pointer-events-none select-none z-0"
               style={{
                 ...cardDimensions,
                 maxHeight: dynamicMaxHeight ? Math.min(dynamicMaxHeight, 480) : cardDimensions.maxHeight
@@ -194,6 +195,7 @@ export default function Study() {
         highlightedRating={highlightedRating}
         containerRef={controlsRef}
       />
+      </div>
     </div>
   )
 }
