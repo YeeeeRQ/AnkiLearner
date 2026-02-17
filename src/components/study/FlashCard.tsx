@@ -174,6 +174,7 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard:
             <button 
               onClick={(e) => { 
                 e.stopPropagation(); 
+                console.log('Play audio clicked:', currentCard.front);
                 speak(currentCard.front); 
               }}
               onPointerDownCapture={(e) => e.stopPropagation()}

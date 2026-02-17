@@ -51,12 +51,16 @@ export default function usePronunciation(word: string, isLoop?: boolean) {
   const loop = useMemo(() => (typeof isLoop === 'boolean' ? isLoop : pronunciationConfig.isLoop), [isLoop, pronunciationConfig.isLoop])
   const [isPlaying, setIsPlaying] = useState(false)
 
-  const [play, { stop, sound }] = useSound(generateWordSoundSrc(word, pronunciationConfig.type), {
+  const soundSrc = generateWordSoundSrc(word, pronunciationConfig.type);
+  const [play, { stop, sound }] = useSound(soundSrc, {
     html5: true,
-    format: ['mp3'],
+    format: ['mp3', 'aac'],
     loop,
     volume: pronunciationConfig.volume,
     rate: pronunciationConfig.rate,
+    onload: () => console.log('Audio loaded successfully from:', soundSrc),
+    onloaderror: (_id, err) => console.error('Audio load error:', err, 'Source:', soundSrc),
+    onplayerror: (_id, err) => console.error('Audio play error:', err, 'Source:', soundSrc)
   } as HookOptions)
 
   useEffect(() => {

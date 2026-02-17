@@ -21,21 +21,27 @@ export function useStudySession() {
   const [showComplete, setShowComplete] = useState(false)
 
   const { play: playPronunciation } = usePronunciation(currentCard?.front || '')
-  const playFlipSound = useFlipSound()
   
   // Prefetch next card's audio
   usePrefetchPronunciationSound(queue[1]?.front)
 
+  const playFlipSound = useFlipSound()
+
   const speak = useCallback((text: string) => {
+    console.log('useStudySession speak called with:', text, 'currentCard:', currentCard?.front);
     if (text === currentCard?.front) {
+      console.log('Playing pronunciation via usePronunciation hook');
       playPronunciation()
     } else {
+      console.log('Playing pronunciation via SpeechSynthesis (fallback)');
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel()
         const utterance = new SpeechSynthesisUtterance(text)
         utterance.lang = 'en-US'
         utterance.rate = 1.0
         window.speechSynthesis.speak(utterance)
+      } else {
+        console.warn('SpeechSynthesis API not available');
       }
     }
   }, [currentCard, playPronunciation])
