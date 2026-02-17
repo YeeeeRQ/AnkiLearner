@@ -172,8 +172,12 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard:
           {/* Pronunciation / Audio Button */}
           {!isBack && (
             <button 
-              onClick={(e) => { e.stopPropagation(); speak(currentCard.front); }}
-              className={`inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm ${skin.textClass}`}
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                speak(currentCard.front); 
+              }}
+              onPointerDownCapture={(e) => e.stopPropagation()}
+              className={`relative z-50 inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
               title="Play Audio"
             >
               <SpeakerWaveIcon className="w-5 h-5" />
