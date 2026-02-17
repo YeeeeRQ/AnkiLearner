@@ -10,3 +10,5 @@ declare module '*.mp3' {
   export default src;
 }
 
+declare const __APP_VERSION__: string;
+

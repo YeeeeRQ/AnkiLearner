@@ -73,7 +73,7 @@ export default function Settings() {
           <div className="flex items-center justify-between py-4">
             <div>
               <div className="font-medium text-neutral-900 dark:text-neutral-100">版本</div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">v0.1.0</div>
+              <div className="text-sm text-neutral-500 dark:text-neutral-400">v{__APP_VERSION__}</div>
             </div>
           </div>
 
