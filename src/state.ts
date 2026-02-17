@@ -21,3 +21,6 @@ export const pronunciationConfigAtom = atomWithStorage<PronunciationConfig>('pro
   volume: 1,
   rate: 1
 })
+
+// Sound effect volume (0-1)
+export const soundEffectVolumeAtom = atomWithStorage<number>('sound-effect-volume', 0.5)
