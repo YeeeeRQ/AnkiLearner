@@ -1,60 +1,346 @@
 [
-  { "front": "academic", "back": "a. 学术的", "note": "IELTS" },
-  { "front": "achieve", "back": "vt. 实现，达到", "note": "IELTS" },
-  { "front": "acquire", "back": "vt. 获得，取得", "note": "IELTS" },
-  { "front": "adapt", "back": "vt. 使适应", "note": "IELTS" },
-  { "front": "adequate", "back": "a. 足够的", "note": "IELTS" },
-  { "front": "adjust", "back": "vt. 调整，调节", "note": "IELTS" },
-  { "front": "administration", "back": "n. 管理，行政", "note": "IELTS" },
-  { "front": "adult", "back": "n. 成年人", "note": "IELTS" },
-  { "front": "affect", "back": "vt. 影响", "note": "IELTS" },
-  { "front": "alter", "back": "vt. 改变", "note": "IELTS" },
-  { "front": "alternative", "back": "n. 供替代的选择", "note": "IELTS" },
-  { "front": "analysis", "back": "n. 分析", "note": "IELTS" },
-  { "front": "annual", "back": "a. 每年的", "note": "IELTS" },
-  { "front": "anticipate", "back": "vt. 预期", "note": "IELTS" },
-  { "front": "apparent", "back": "a. 明显的", "note": "IELTS" },
-  { "front": "approach", "back": "n. 方法，途径", "note": "IELTS" },
-  { "front": "appropriate", "back": "a. 适当的", "note": "IELTS" },
-  { "front": "aspect", "back": "n. 方面", "note": "IELTS" },
-  { "front": "assess", "back": "vt. 评估", "note": "IELTS" },
-  { "front": "assist", "back": "vt. 协助", "note": "IELTS" },
-  { "front": "assume", "back": "vt. 假设", "note": "IELTS" },
-  { "front": "attitude", "back": "n. 态度", "note": "IELTS" },
-  { "front": "attribute", "back": "vt. 归因于", "note": "IELTS" },
-  { "front": "authority", "back": "n. 权威", "note": "IELTS" },
-  { "front": "available", "back": "a. 可利用的", "note": "IELTS" },
-  { "front": "aware", "back": "a. 意识到的", "note": "IELTS" },
-  { "front": "benefit", "back": "n. 利益", "note": "IELTS" },
-  { "front": "capable", "back": "a. 有能力的", "note": "IELTS" },
-  { "front": "capacity", "back": "n. 容量，能力", "note": "IELTS" },
-  { "front": "category", "back": "n. 种类", "note": "IELTS" },
-  { "front": "challenge", "back": "n. 挑战", "note": "IELTS" },
-  { "front": "chemical", "back": "a. 化学的", "note": "IELTS" },
-  { "front": "circumstance", "back": "n. 环境，情况", "note": "IELTS" },
-  { "front": "cite", "back": "vt. 引用", "note": "IELTS" },
-  { "front": "civil", "back": "a. 公民的", "note": "IELTS" },
-  { "front": "clarify", "back": "vt. 澄清", "note": "IELTS" },
-  { "front": "classic", "back": "a. 经典的", "note": "IELTS" },
-  { "front": "clause", "back": "n. 条款", "note": "IELTS" },
-  { "front": "code", "back": "n. 法典，代码", "note": "IELTS" },
-  { "front": "coherent", "back": "a. 连贯的", "note": "IELTS" },
-  { "front": "coincide", "back": "vi. 一致", "note": "IELTS" },
-  { "front": "collapse", "back": "vi. 倒塌", "note": "IELTS" },
-  { "front": "colleague", "back": "n. 同事", "note": "IELTS" },
-  { "front": "commence", "back": "vt. 开始", "note": "IELTS" },
-  { "front": "comment", "back": "n. 评论", "note": "IELTS" },
-  { "front": "commission", "back": "n. 委员会", "note": "IELTS" },
-  { "front": "commit", "back": "vt. 承诺，犯罪", "note": "IELTS" },
-  { "front": "communicate", "back": "vt. 交流", "note": "IELTS" },
-  { "front": "community", "back": "n. 社区", "note": "IELTS" },
-  { "front": "compatible", "back": "a. 兼容的", "note": "IELTS" },
-  { "front": "compensate", "back": "vt. 补偿", "note": "IELTS" },
-  { "front": "compile", "back": "vt. 汇编", "note": "IELTS" },
-  { "front": "complement", "back": "vt. 补充", "note": "IELTS" },
-  { "front": "complex", "back": "a. 复杂的", "note": "IELTS" },
-  { "front": "component", "back": "n. 成分", "note": "IELTS" },
-  { "front": "compound", "back": "n. 化合物", "note": "IELTS" },
-  { "front": "comprehensive", "back": "a. 综合的", "note": "IELTS" },
-  { "front": "comprise", "back": "vt. 包含", "note": "IELTS" }
+  {
+    "front": "academic",
+    "back": "a. 学术的",
+    "note": "IELTS",
+    "phonetic": "/ˌækəˈdɛmɪk/"
+  },
+  {
+    "front": "achieve",
+    "back": "vt. 实现，达到",
+    "note": "IELTS",
+    "phonetic": "/əˈtʃiːv/"
+  },
+  {
+    "front": "acquire",
+    "back": "vt. 获得，取得",
+    "note": "IELTS",
+    "phonetic": "/əˈkwaɪə/"
+  },
+  {
+    "front": "adapt",
+    "back": "vt. 使适应",
+    "note": "IELTS",
+    "phonetic": "/əˈdæpt/"
+  },
+  {
+    "front": "adequate",
+    "back": "a. 足够的",
+    "note": "IELTS"
+  },
+  {
+    "front": "adjust",
+    "back": "vt. 调整，调节",
+    "note": "IELTS",
+    "phonetic": "/əˈdʒʌst/"
+  },
+  {
+    "front": "administration",
+    "back": "n. 管理，行政",
+    "note": "IELTS",
+    "phonetic": "/ədˌmɪnəˈstɹeɪʃən/"
+  },
+  {
+    "front": "adult",
+    "back": "n. 成年人",
+    "note": "IELTS",
+    "phonetic": "/əˈdʌlt/"
+  },
+  {
+    "front": "affect",
+    "back": "vt. 影响",
+    "note": "IELTS",
+    "phonetic": "/əˈfɛkt/"
+  },
+  {
+    "front": "alter",
+    "back": "vt. 改变",
+    "note": "IELTS",
+    "phonetic": "/ˈɑl.tɚ/"
+  },
+  {
+    "front": "alternative",
+    "back": "n. 供替代的选择",
+    "note": "IELTS",
+    "phonetic": "/ɒl.ˈtɜː(ɹ).nə.tɪv/"
+  },
+  {
+    "front": "analysis",
+    "back": "n. 分析",
+    "note": "IELTS",
+    "phonetic": "/əˈnælɪsɪs/"
+  },
+  {
+    "front": "annual",
+    "back": "a. 每年的",
+    "note": "IELTS",
+    "phonetic": "/ˈæn.ju.əl/"
+  },
+  {
+    "front": "anticipate",
+    "back": "vt. 预期",
+    "note": "IELTS",
+    "phonetic": "/ænˈtɪs.ɪ.peɪt/"
+  },
+  {
+    "front": "apparent",
+    "back": "a. 明显的",
+    "note": "IELTS",
+    "phonetic": "/əˈpæ.ɹənt/"
+  },
+  {
+    "front": "approach",
+    "back": "n. 方法，途径",
+    "note": "IELTS",
+    "phonetic": "/əˈpɹəʊt͡ʃ/"
+  },
+  {
+    "front": "appropriate",
+    "back": "a. 适当的",
+    "note": "IELTS"
+  },
+  {
+    "front": "aspect",
+    "back": "n. 方面",
+    "note": "IELTS",
+    "phonetic": "/ˈæspɛkt/"
+  },
+  {
+    "front": "assess",
+    "back": "vt. 评估",
+    "note": "IELTS",
+    "phonetic": "/əˈsɛs/"
+  },
+  {
+    "front": "assist",
+    "back": "vt. 协助",
+    "note": "IELTS",
+    "phonetic": "/əˈsɪst/"
+  },
+  {
+    "front": "assume",
+    "back": "vt. 假设",
+    "note": "IELTS",
+    "phonetic": "/əˈsuːm/"
+  },
+  {
+    "front": "attitude",
+    "back": "n. 态度",
+    "note": "IELTS",
+    "phonetic": "/ˈætɪˌtjuːd/"
+  },
+  {
+    "front": "attribute",
+    "back": "vt. 归因于",
+    "note": "IELTS"
+  },
+  {
+    "front": "authority",
+    "back": "n. 权威",
+    "note": "IELTS",
+    "phonetic": "/ɔːˈθɒɹəti/"
+  },
+  {
+    "front": "available",
+    "back": "a. 可利用的",
+    "note": "IELTS",
+    "phonetic": "/əˈveɪləb(ə)l/"
+  },
+  {
+    "front": "aware",
+    "back": "a. 意识到的",
+    "note": "IELTS",
+    "phonetic": "/əˈweːɹ/"
+  },
+  {
+    "front": "benefit",
+    "back": "n. 利益",
+    "note": "IELTS",
+    "phonetic": "/ˈbɛn.ɪ.fɪt/"
+  },
+  {
+    "front": "capable",
+    "back": "a. 有能力的",
+    "note": "IELTS",
+    "phonetic": "/ˈkeɪpəbl̩/"
+  },
+  {
+    "front": "capacity",
+    "back": "n. 容量，能力",
+    "note": "IELTS",
+    "phonetic": "/kəˈpæsɪti/"
+  },
+  {
+    "front": "category",
+    "back": "n. 种类",
+    "note": "IELTS",
+    "phonetic": "/ˈkætəˌɡɔɹi/"
+  },
+  {
+    "front": "challenge",
+    "back": "n. 挑战",
+    "note": "IELTS",
+    "phonetic": "/ˈtʃæl.əndʒ/"
+  },
+  {
+    "front": "chemical",
+    "back": "a. 化学的",
+    "note": "IELTS",
+    "phonetic": "/ˈkɛmɪkəl/"
+  },
+  {
+    "front": "circumstance",
+    "back": "n. 环境，情况",
+    "note": "IELTS",
+    "phonetic": "/-æns/"
+  },
+  {
+    "front": "cite",
+    "back": "vt. 引用",
+    "note": "IELTS",
+    "phonetic": "/saɪt/"
+  },
+  {
+    "front": "civil",
+    "back": "a. 公民的",
+    "note": "IELTS",
+    "phonetic": "/ˈsɪv.əl/"
+  },
+  {
+    "front": "clarify",
+    "back": "vt. 澄清",
+    "note": "IELTS",
+    "phonetic": "/ˈklæɹɪfaɪ/"
+  },
+  {
+    "front": "classic",
+    "back": "a. 经典的",
+    "note": "IELTS",
+    "phonetic": "/ˈklæ.sɪk/"
+  },
+  {
+    "front": "clause",
+    "back": "n. 条款",
+    "note": "IELTS",
+    "phonetic": "/klɔːz/"
+  },
+  {
+    "front": "code",
+    "back": "n. 法典，代码",
+    "note": "IELTS",
+    "phonetic": "/kəʊd/"
+  },
+  {
+    "front": "coherent",
+    "back": "a. 连贯的",
+    "note": "IELTS",
+    "phonetic": "/koːˈhiɹənt/"
+  },
+  {
+    "front": "coincide",
+    "back": "vi. 一致",
+    "note": "IELTS",
+    "phonetic": "/ˌkoʊɪnˈsaɪd/"
+  },
+  {
+    "front": "collapse",
+    "back": "vi. 倒塌",
+    "note": "IELTS",
+    "phonetic": "/kəˈlæps/"
+  },
+  {
+    "front": "colleague",
+    "back": "n. 同事",
+    "note": "IELTS",
+    "phonetic": "/ˈkɒliːɡ/"
+  },
+  {
+    "front": "commence",
+    "back": "vt. 开始",
+    "note": "IELTS",
+    "phonetic": "/kəˈmɛns/"
+  },
+  {
+    "front": "comment",
+    "back": "n. 评论",
+    "note": "IELTS",
+    "phonetic": "/ˈkɒmɛnt/"
+  },
+  {
+    "front": "commission",
+    "back": "n. 委员会",
+    "note": "IELTS",
+    "phonetic": "/kəˈmɪʃən/"
+  },
+  {
+    "front": "commit",
+    "back": "vt. 承诺，犯罪",
+    "note": "IELTS",
+    "phonetic": "/kəˈmɪt/"
+  },
+  {
+    "front": "communicate",
+    "back": "vt. 交流",
+    "note": "IELTS",
+    "phonetic": "/kəˈmjuːnɪkeɪt/"
+  },
+  {
+    "front": "community",
+    "back": "n. 社区",
+    "note": "IELTS",
+    "phonetic": "/k(ə)ˈmjunəti/"
+  },
+  {
+    "front": "compatible",
+    "back": "a. 兼容的",
+    "note": "IELTS",
+    "phonetic": "/kəmˈpætəbəl/"
+  },
+  {
+    "front": "compensate",
+    "back": "vt. 补偿",
+    "note": "IELTS",
+    "phonetic": "/ˈkɒm.pən.seɪt/"
+  },
+  {
+    "front": "compile",
+    "back": "vt. 汇编",
+    "note": "IELTS",
+    "phonetic": "/kəmpʌɪl/"
+  },
+  {
+    "front": "complement",
+    "back": "vt. 补充",
+    "note": "IELTS",
+    "phonetic": "/ˈkɒmpləmənt/"
+  },
+  {
+    "front": "complex",
+    "back": "a. 复杂的",
+    "note": "IELTS"
+  },
+  {
+    "front": "component",
+    "back": "n. 成分",
+    "note": "IELTS",
+    "phonetic": "/kʌmˈpoʊnənt/"
+  },
+  {
+    "front": "compound",
+    "back": "n. 化合物",
+    "note": "IELTS",
+    "phonetic": "/ˈkɒmpaʊnd/"
+  },
+  {
+    "front": "comprehensive",
+    "back": "a. 综合的",
+    "note": "IELTS",
+    "phonetic": "/ˌkɒm.pɹɪˈhɛn.sɪv/"
+  },
+  {
+    "front": "comprise",
+    "back": "vt. 包含",
+    "note": "IELTS",
+    "phonetic": "/kəmˈpɹaɪz/"
+  }
 ]
