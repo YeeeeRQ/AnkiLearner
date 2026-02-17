@@ -121,7 +121,12 @@ export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDeb
             {/* Front Face */}
             <div 
               className="absolute inset-0 w-full h-full"
-              style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+              style={{ 
+                backfaceVisibility: 'hidden', 
+                WebkitBackfaceVisibility: 'hidden',
+                zIndex: isFlipped ? 0 : 1,
+                pointerEvents: isFlipped ? 'none' : 'auto'
+              }}
             >
               <CardSide currentCard={currentCard} speak={speak} isBack={false} skin={skin} phonetic={phonetic} />
             </div>
@@ -129,7 +134,13 @@ export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDeb
             {/* Back Face */}
             <div 
               className="absolute inset-0 w-full h-full"
-              style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+              style={{ 
+                backfaceVisibility: 'hidden', 
+                WebkitBackfaceVisibility: 'hidden', 
+                transform: 'rotateY(180deg)',
+                zIndex: isFlipped ? 1 : 0,
+                pointerEvents: isFlipped ? 'auto' : 'none'
+              }}
             >
               <CardSide currentCard={currentCard} speak={speak} isBack={true} skin={skin} phonetic={phonetic} />
             </div>
@@ -242,20 +253,18 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard:
           )}
           
           {/* Pronunciation / Audio Button */}
-          {!isBack && (
-            <button 
-              onClick={(e) => { 
-                e.stopPropagation(); 
-                console.log('Play audio clicked:', currentCard.front);
-                speak(currentCard.front); 
-              }}
-              onPointerDownCapture={(e) => e.stopPropagation()}
-              className={`relative z-50 inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
-              title="Play Audio"
-            >
-              <SpeakerWaveIcon className="w-5 h-5" />
-            </button>
-          )}
+          <button 
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              console.log('Play audio clicked:', currentCard.front);
+              speak(currentCard.front); 
+            }}
+            onPointerDownCapture={(e) => e.stopPropagation()}
+            className={`relative z-50 inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
+            title="Play Audio"
+          >
+            <SpeakerWaveIcon className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Divider for Back Side */}
