@@ -1,15 +1,35 @@
 import { useAtom } from 'jotai'
-import { pronunciationConfigAtom, soundEffectVolumeAtom } from '../state'
+import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom } from '../state'
 import Select from '../components/Select'
+import Switch from '../components/Switch'
 
 export default function Settings() {
   const [pronunciationConfig, setPronunciationConfig] = useAtom(pronunciationConfigAtom)
   const [soundEffectVolume, setSoundEffectVolume] = useAtom(soundEffectVolumeAtom)
+  const [enableDrag, setEnableDrag] = useAtom(enableDragInteractionAtom)
 
   return (
     <div className="max-w-4xl">
       <h2 className="text-2xl font-bold mb-6 text-neutral-900 dark:text-neutral-100">设置</h2>
       
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden mb-6">
+        <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
+          <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">交互设置</h3>
+        </div>
+        <div className="p-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">启用卡片拖拽</div>
+              <div className="text-xs text-neutral-500 dark:text-neutral-400">允许在练习时通过拖拽卡片来评分</div>
+            </div>
+            <Switch
+              checked={enableDrag}
+              onChange={setEnableDrag}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden mb-6">
         <div className="p-6 border-b border-neutral-200 dark:border-neutral-700">
           <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">声音设置</h3>

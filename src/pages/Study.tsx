@@ -9,8 +9,12 @@ import { DragPathVisual } from '../components/study/DragVisuals'
 import { getSkinForCard } from '../components/study/CardSkins'
 import { StudyTutorial } from '../components/study/StudyTutorial'
 import { useRef, useState, useLayoutEffect } from 'react'
+import { useAtomValue } from 'jotai'
+import { enableDragInteractionAtom } from '../state'
 
 export default function Study() {
+  const enableDrag = useAtomValue(enableDragInteractionAtom)
+
   const {
     queue,
     currentCard,
@@ -237,9 +241,10 @@ export default function Study() {
           isDebug={isDebug}
           speak={speak}
           dragValues={{ x, y, rotate, opacity }}
-          dragHandlers={{ onDrag: handleDrag, onDragEnd: handleDragEnd }}
+          dragHandlers={enableDrag ? { onDrag: handleDrag, onDragEnd: handleDragEnd } : { onDrag: () => {}, onDragEnd: () => {} }}
           width={cardSize.width}
           height={cardSize.height}
+          enableDrag={enableDrag}
         />
         </div>
       </div>

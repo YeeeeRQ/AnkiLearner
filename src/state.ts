@@ -24,3 +24,6 @@ export const pronunciationConfigAtom = atomWithStorage<PronunciationConfig>('pro
 
 // Sound effect volume (0-1)
 export const soundEffectVolumeAtom = atomWithStorage<number>('sound-effect-volume', 0.5)
+
+// Drag interaction config
+export const enableDragInteractionAtom = atomWithStorage<boolean>('enable-drag-interaction', true)

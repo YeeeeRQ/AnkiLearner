@@ -24,6 +24,7 @@ interface FlashCardProps {
   width?: number | string
   height?: number | string
   className?: string
+  enableDrag?: boolean
 }
 
 export const cardDimensions = {
@@ -33,7 +34,7 @@ export const cardDimensions = {
   maxHeight: '480px'
 }
 
-export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className }: FlashCardProps) {
+export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className, enableDrag = true }: FlashCardProps) {
   const { x, y, rotate, opacity } = dragValues
   
   // Randomly select a skin based on currentCard.id to ensure persistence during flip/re-render
@@ -88,14 +89,14 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
         className="w-full h-full touch-none focus:outline-none relative"
         key={currentCard.id}
         style={{ x, y, rotate, opacity }}
-        drag
+        drag={enableDrag}
         dragConstraints={{ left: -3000, right: 3000, top: -3000, bottom: 3000 }}
         dragSnapToOrigin
         dragElastic={1}
         dragMomentum={false}
         onDrag={dragHandlers.onDrag}
         onDragEnd={dragHandlers.onDragEnd}
-        whileTap={{ cursor: "grabbing" }}
+        whileTap={enableDrag ? { cursor: "grabbing" } : undefined}
       >
         <DebugOverlay isDebug={isDebug} />
         
