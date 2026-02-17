@@ -6,3 +6,18 @@ export const currentDeckIdAtom = atom<number | null>(null)
 
 // Theme state: 'dark' | 'light' | 'system'
 export const themeAtom = atomWithStorage<'dark' | 'light' | 'system'>('app-theme', 'system')
+
+// Pronunciation config
+export interface PronunciationConfig {
+  type: 'uk' | 'us' | 'zh' | 'ja' | 'de' | 'id' | 'hapin' | 'kk' | 'romaji'
+  isLoop: boolean
+  volume: number
+  rate: number
+}
+
+export const pronunciationConfigAtom = atomWithStorage<PronunciationConfig>('pronunciation-config', {
+  type: 'us',
+  isLoop: false,
+  volume: 1,
+  rate: 1
+})

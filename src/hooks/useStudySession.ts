@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { db, type Card } from '../db'
 import { schedule } from '../scheduler'
 import { prefetchPhonetics } from '../utils/phoneticFetcher'
+import usePronunciation, { usePrefetchPronunciationSound } from './usePronunciation'
 
 export function useStudySession() {
   const { id } = useParams()
@@ -18,15 +19,34 @@ export function useStudySession() {
   const [history, setHistory] = useState<Card[]>([])
   const [showComplete, setShowComplete] = useState(false)
 
+  const { play: playPronunciation } = usePronunciation(currentCard?.front || '')
+  
+  // Prefetch next card's audio
+  usePrefetchPronunciationSound(queue[1]?.front)
+
   const speak = useCallback((text: string) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = 'en-US'
-      utterance.rate = 1.0
-      window.speechSynthesis.speak(utterance)
+    if (text === currentCard?.front) {
+      playPronunciation()
+    } else {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.lang = 'en-US'
+        utterance.rate = 1.0
+        window.speechSynthesis.speak(utterance)
+      }
     }
-  }, [])
+  }, [currentCard, playPronunciation])
+
+  // Auto-play audio when card changes
+  useEffect(() => {
+    if (autoPlayAudio && currentCard && !loading) {
+      const timer = setTimeout(() => {
+        playPronunciation()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [currentCard, autoPlayAudio, loading, playPronunciation])
 
   useEffect(() => {
     async function loadCards() {
@@ -57,14 +77,12 @@ export function useStudySession() {
       if (combined.length > 0) {
         setCurrentCard(combined[0])
         setIsFlipped(shouldAutoShow)
-        if (shouldAutoPlay) {
-          setTimeout(() => speak(combined[0].front), 500)
-        }
+        // Auto-play handled by separate useEffect
       }
       setLoading(false)
     }
     loadCards()
-  }, [deckId, speak])
+  }, [deckId]) // Removed speak from dependency
 
   // Prefetch phonetics for upcoming cards
   useEffect(() => {
