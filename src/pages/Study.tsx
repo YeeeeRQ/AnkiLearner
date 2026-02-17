@@ -142,7 +142,7 @@ export default function Study() {
               style={{
                 width: cardSize.width,
                 height: cardSize.height,
-                transform: 'translate(-50%, -50%) translateX(-120%) rotate(-6deg) scale(0.9)'
+                transform: 'translate(-50%, -50%) translateX(-105%) rotate(-6deg) scale(0.9)'
               }}
             >
               <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col items-center justify-center p-8 text-center ${prevSkin.bgClass} ${prevSkin.borderClass}`}>
@@ -168,7 +168,7 @@ export default function Study() {
               style={{
                 width: cardSize.width,
                 height: cardSize.height,
-                transform: 'translate(-50%, -50%) translateX(120%) rotate(6deg) scale(0.9)'
+                transform: 'translate(-50%, -50%) translateX(105%) rotate(6deg) scale(0.9)'
               }}
             >
               <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col items-center justify-center p-8 text-center ${nextSkin.bgClass} ${nextSkin.borderClass}`}>
