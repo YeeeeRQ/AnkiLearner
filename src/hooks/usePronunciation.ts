@@ -96,25 +96,11 @@ export function usePrefetchPronunciationSound(word: string | undefined) {
     const head = document.head
     const isPrefetch = (Array.from(head.querySelectorAll('link[href]')) as HTMLLinkElement[]).some((el) => el.href === soundUrl)
 
-    // if (!isPrefetch) {
-    //   const audio = new Audio()
-    //   audio.src = soundUrl
-    //   audio.preload = 'auto'
-
-    //   audio.crossOrigin = 'anonymous'
-    //   audio.style.display = 'none'
-
-    //   head.appendChild(audio)
-
-    //   return () => {
-    //     head.removeChild(audio)
-    //   }
-    // }
-
     if (!isPrefetch) {
       const link = document.createElement('link')
       link.rel = 'prefetch'
       link.href = soundUrl
+      link.as = 'audio'
       head.appendChild(link)
 
       return () => {
