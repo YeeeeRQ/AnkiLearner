@@ -5,11 +5,12 @@ interface StudyControlsProps {
   setIsFlipped: (val: boolean) => void
   handleRate: (rating: 1 | 2 | 3 | 4) => void
   highlightedRating: 1 | 2 | 3 | 4 | null
+  containerRef?: React.RefObject<HTMLDivElement>
 }
 
-export function StudyControls({ isFlipped, setIsFlipped, handleRate, highlightedRating }: StudyControlsProps) {
+export function StudyControls({ isFlipped, setIsFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {
   return (
-    <div className="fixed bottom-8 left-0 right-0 flex justify-center px-4">
+    <div ref={containerRef} className="fixed bottom-8 left-0 right-0 flex justify-center px-4">
       <div className="flex flex-col items-center w-full max-w-2xl gap-8 md:gap-5">
         <div className={`grid grid-cols-4 gap-4 md:gap-3 w-full max-w-2xl transition-all duration-300 ${isFlipped ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
           <RatingButton 
