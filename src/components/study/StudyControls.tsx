@@ -1,4 +1,6 @@
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
+import { useAtomValue } from 'jotai'
+import { enableDragInteractionAtom, showDifficultyButtonsAtom } from '../../state'
 
 interface StudyControlsProps {
   isFlipped: boolean
@@ -9,10 +11,16 @@ interface StudyControlsProps {
 }
 
 export function StudyControls({ isFlipped, setIsFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {
+  const enableDrag = useAtomValue(enableDragInteractionAtom)
+  const showDifficultyButtons = useAtomValue(showDifficultyButtonsAtom)
+  
+  // Always show buttons if drag is disabled, otherwise respect the setting
+  const shouldShowButtons = !enableDrag || showDifficultyButtons
+
   return (
     <div ref={containerRef} className="w-full flex justify-center px-4 pb-8 pt-4 z-40 shrink-0">
       <div className="flex flex-col items-center w-full max-w-2xl gap-4 md:gap-5">
-        <div className={`grid grid-cols-4 gap-4 md:gap-3 w-full max-w-2xl transition-all duration-300 ${isFlipped ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+        <div className={`grid grid-cols-4 gap-4 md:gap-3 w-full max-w-2xl transition-all duration-300 ${isFlipped && shouldShowButtons ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
           <RatingButton 
             id="rating-btn-1"
             label="重来" 

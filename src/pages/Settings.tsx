@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom } from '../state'
+import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom, showDifficultyButtonsAtom } from '../state'
 import Select from '../components/Select'
 import Switch from '../components/Switch'
 
@@ -7,6 +7,7 @@ export default function Settings() {
   const [pronunciationConfig, setPronunciationConfig] = useAtom(pronunciationConfigAtom)
   const [soundEffectVolume, setSoundEffectVolume] = useAtom(soundEffectVolumeAtom)
   const [enableDrag, setEnableDrag] = useAtom(enableDragInteractionAtom)
+  const [showDifficultyButtons, setShowDifficultyButtons] = useAtom(showDifficultyButtonsAtom)
 
   return (
     <div className="max-w-4xl">
@@ -20,11 +21,23 @@ export default function Settings() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">启用卡片拖拽</div>
-              <div className="text-xs text-neutral-500 dark:text-neutral-400">允许在练习时通过拖拽卡片来评分</div>
+              <div className="text-xs text-neutral-500 dark:text-neutral-400">允许在练习时通过拖拽卡片来对难度评分</div>
             </div>
             <Switch
               checked={enableDrag}
               onChange={setEnableDrag}
+            />
+          </div>
+
+          <div className="flex items-center justify-between border-t border-neutral-100 dark:border-neutral-700 pt-6">
+            <div>
+              <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">显示难度按钮</div>
+              <div className="text-xs text-neutral-500 dark:text-neutral-400">在拖拽交互启用时，是否显示底部的难度选择按钮</div>
+            </div>
+            <Switch
+              checked={showDifficultyButtons}
+              onChange={setShowDifficultyButtons}
+              disabled={!enableDrag}
             />
           </div>
         </div>

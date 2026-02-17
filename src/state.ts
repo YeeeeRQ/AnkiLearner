@@ -27,3 +27,6 @@ export const soundEffectVolumeAtom = atomWithStorage<number>('sound-effect-volum
 
 // Drag interaction config
 export const enableDragInteractionAtom = atomWithStorage<boolean>('enable-drag-interaction', true)
+
+// Show difficulty buttons config
+export const showDifficultyButtonsAtom = atomWithStorage<boolean>('show-difficulty-buttons', true)
