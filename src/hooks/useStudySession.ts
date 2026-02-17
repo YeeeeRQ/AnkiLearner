@@ -20,7 +20,28 @@ export function useStudySession() {
   const [history, setHistory] = useState<Card[]>([])
   const [showComplete, setShowComplete] = useState(false)
 
-  const { play: playPronunciation } = usePronunciation(currentCard?.front || '')
+  const speakTTS = useCallback((text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.lang = 'en-US'
+      utterance.rate = 1.0
+      window.speechSynthesis.speak(utterance)
+    } else {
+      console.warn('SpeechSynthesis API not available')
+    }
+  }, [])
+
+  const handlePlayError = useCallback((err: any) => {
+    console.warn('Youdao pronunciation failed, falling back to TTS', err)
+    if (currentCard?.front) {
+      speakTTS(currentCard.front)
+    }
+  }, [currentCard?.front, speakTTS])
+
+  const { play: playPronunciation } = usePronunciation(currentCard?.front || '', {
+    onPlayError: handlePlayError
+  })
   
   // Prefetch next card's audio
   usePrefetchPronunciationSound(queue[1]?.front)
@@ -28,30 +49,19 @@ export function useStudySession() {
   const playFlipSound = useFlipSound()
 
   const speak = useCallback((text: string) => {
-    console.log('useStudySession speak called with:', text, 'currentCard:', currentCard?.front);
     if (text === currentCard?.front) {
-      console.log('Playing pronunciation via usePronunciation hook');
       playPronunciation()
     } else {
-      console.log('Playing pronunciation via SpeechSynthesis (fallback)');
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel()
-        const utterance = new SpeechSynthesisUtterance(text)
-        utterance.lang = 'en-US'
-        utterance.rate = 1.0
-        window.speechSynthesis.speak(utterance)
-      } else {
-        console.warn('SpeechSynthesis API not available');
-      }
+      speakTTS(text)
     }
-  }, [currentCard, playPronunciation])
+  }, [currentCard, playPronunciation, speakTTS])
 
   // Auto-play audio when card changes
   useEffect(() => {
     if (autoPlayAudio && currentCard && !loading) {
       const timer = setTimeout(() => {
         playPronunciation()
-      }, 500)
+      }, 300)
       return () => clearTimeout(timer)
     }
   }, [currentCard, autoPlayAudio, loading, playPronunciation])
@@ -144,9 +154,7 @@ export function useStudySession() {
       const nextCard = nextQueue[0]
       setCurrentCard(nextCard)
       setIsFlipped(autoShowAnswer)
-      if (autoPlayAudio) {
-        setTimeout(() => speak(nextCard.front), 500)
-      }
+      // Auto-play is handled by useEffect when currentCard changes
     } else {
       setShowComplete(true)
     }

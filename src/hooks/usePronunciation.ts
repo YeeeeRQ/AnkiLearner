@@ -1,21 +1,7 @@
 import { pronunciationConfigAtom, type PronunciationConfig } from '../state'
-import { addHowlListener, noop, romajiToHiragana } from '../utils/sound'
-import { Howl } from 'howler'
+import { romajiToHiragana } from '../utils/sound'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useState } from 'react'
-import useSound from 'use-sound'
-
-interface HookOptions {
-  html5?: boolean
-  format?: string[]
-  loop?: boolean
-  volume?: number
-  rate?: number
-  xhr?: any
-  onloaderror?: (id: any, err: any) => void
-  onplayerror?: (id: any, err: any) => void
-  [key: string]: any
-}
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 
 const pronunciationApi = 'https://dict.youdao.com/dictvoice?audio='
 
@@ -46,44 +32,88 @@ export function generateWordSoundSrc(word: string, pronunciation: PronunciationT
   }
 }
 
-export default function usePronunciation(word: string, isLoop?: boolean) {
+export interface UsePronunciationOptions {
+  loop?: boolean
+  onPlayError?: (err: any) => void
+}
+
+export default function usePronunciation(word: string, options?: UsePronunciationOptions | boolean) {
   const pronunciationConfig = useAtomValue(pronunciationConfigAtom)
-  const loop = useMemo(() => (typeof isLoop === 'boolean' ? isLoop : pronunciationConfig.isLoop), [isLoop, pronunciationConfig.isLoop])
+  
+  const loop = useMemo(() => {
+    if (typeof options === 'boolean') return options
+    return options?.loop ?? pronunciationConfig.isLoop
+  }, [options, pronunciationConfig.isLoop])
+
+  const onPlayError = useMemo(() => {
+    if (typeof options === 'object' && options !== null) {
+      return options.onPlayError
+    }
+    return undefined
+  }, [options])
+
   const [isPlaying, setIsPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  const soundSrc = generateWordSoundSrc(word, pronunciationConfig.type);
-  const [play, { stop, sound }] = useSound(soundSrc, {
-    html5: true,
-    format: ['mp3', 'aac'],
-    loop,
-    volume: pronunciationConfig.volume,
-    rate: pronunciationConfig.rate,
-    onload: () => console.log('Audio loaded successfully from:', soundSrc),
-    onloaderror: (_id, err) => console.error('Audio load error:', err, 'Source:', soundSrc),
-    onplayerror: (_id, err) => console.error('Audio play error:', err, 'Source:', soundSrc)
-  } as HookOptions)
+  const soundSrc = generateWordSoundSrc(word, pronunciationConfig.type)
 
   useEffect(() => {
-    if (!sound) return
-    sound.loop(loop)
-    return noop
-  }, [loop, sound])
+    if (!soundSrc) return
 
-  useEffect(() => {
-    if (!sound) return
-    const unListens: Array<() => void> = []
+    const audio = new Audio(soundSrc)
+    audioRef.current = audio
+    // Preload audio
+    audio.load()
 
-    unListens.push(addHowlListener(sound, 'play', () => setIsPlaying(true)))
-    unListens.push(addHowlListener(sound, 'end', () => setIsPlaying(false)))
-    unListens.push(addHowlListener(sound, 'pause', () => setIsPlaying(false)))
-    unListens.push(addHowlListener(sound, 'playerror', () => setIsPlaying(false)))
+    const handlePlay = () => setIsPlaying(true)
+    const handleEnded = () => setIsPlaying(false)
+    const handlePause = () => setIsPlaying(false)
+    const handleError = (e: Event) => {
+      console.error('Audio play error:', e, 'Source:', soundSrc)
+      setIsPlaying(false)
+      onPlayError?.(e)
+    }
+
+    audio.addEventListener('play', handlePlay)
+    audio.addEventListener('ended', handleEnded)
+    audio.addEventListener('pause', handlePause)
+    audio.addEventListener('error', handleError)
 
     return () => {
+      audio.removeEventListener('play', handlePlay)
+      audio.removeEventListener('ended', handleEnded)
+      audio.removeEventListener('pause', handlePause)
+      audio.removeEventListener('error', handleError)
+      audio.pause()
+      audioRef.current = null
       setIsPlaying(false)
-      unListens.forEach((unListen) => unListen())
-      ;(sound as Howl).unload()
     }
-  }, [sound])
+  }, [soundSrc, onPlayError])
+
+  const play = useCallback(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    audio.loop = loop
+    audio.volume = pronunciationConfig.volume
+    // Note: playbackRate changes might not apply instantly on all browsers before metadata is loaded
+    audio.playbackRate = pronunciationConfig.rate
+
+    audio.play().catch((err) => {
+      console.error('Audio playback failed:', err)
+      setIsPlaying(false)
+      onPlayError?.(err)
+    })
+  }, [loop, pronunciationConfig.volume, pronunciationConfig.rate, onPlayError])
+
+  const stop = useCallback(() => {
+    const audio = audioRef.current
+    if (audio) {
+      audio.pause()
+      audio.currentTime = 0
+      setIsPlaying(false)
+    }
+  }, [])
 
   return { play, stop, isPlaying }
 }
@@ -97,19 +127,17 @@ export function usePrefetchPronunciationSound(word: string | undefined) {
     const soundUrl = generateWordSoundSrc(word, pronunciationConfig.type)
     if (soundUrl === '') return
 
-    const head = document.head
-    const isPrefetch = (Array.from(head.querySelectorAll('link[href]')) as HTMLLinkElement[]).some((el) => el.href === soundUrl)
+    // Mimic the fetch request structure provided by user for preloading
+    // We use mode: 'no-cors' to handle opaque responses and populate browser cache
+    fetch(soundUrl, {
+      mode: 'no-cors',
+      headers: {
+        'Accept': '*/*',
+      },
+      credentials: 'omit'
+    }).catch(err => {
+      console.error('Prefetch failed:', err)
+    })
 
-    if (!isPrefetch) {
-      const link = document.createElement('link')
-      link.rel = 'prefetch'
-      link.href = soundUrl
-      link.as = 'audio'
-      head.appendChild(link)
-
-      return () => {
-        head.removeChild(link)
-      }
-    }
   }, [pronunciationConfig.type, word])
 }
