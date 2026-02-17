@@ -2,7 +2,7 @@ import { pronunciationConfigAtom, type PronunciationConfig } from '../state'
 import { addHowlListener, noop, romajiToHiragana } from '../utils/sound'
 import { Howl } from 'howler'
 import { useAtomValue } from 'jotai'
-import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useSound from 'use-sound'
 
 interface HookOptions {
@@ -22,24 +22,25 @@ const pronunciationApi = 'https://dict.youdao.com/dictvoice?audio='
 export type PronunciationType = PronunciationConfig['type']
 
 export function generateWordSoundSrc(word: string, pronunciation: PronunciationType): string {
+  const encodedWord = encodeURIComponent(word)
   switch (pronunciation) {
     case 'uk':
-      return `${pronunciationApi}${word}&type=1`
+      return `${pronunciationApi}${encodedWord}&type=1`
     case 'us':
-      return `${pronunciationApi}${word}&type=2`
+      return `${pronunciationApi}${encodedWord}&type=2`
     case 'romaji':
       return `${pronunciationApi}${romajiToHiragana(word)}&le=jap`
     case 'zh':
-      return `${pronunciationApi}${word}&le=zh`
+      return `${pronunciationApi}${encodedWord}&le=zh`
     case 'ja':
-      return `${pronunciationApi}${word}&le=jap`
+      return `${pronunciationApi}${encodedWord}&le=jap`
     case 'de':
-      return `${pronunciationApi}${word}&le=de`
+      return `${pronunciationApi}${encodedWord}&le=de`
     case 'hapin':
     case 'kk':
-      return `${pronunciationApi}${word}&le=ru` // 有道不支持哈萨克语, 暂时用俄语发音兜底
+      return `${pronunciationApi}${encodedWord}&le=ru` // 有道不支持哈萨克语, 暂时用俄语发音兜底
     case 'id':
-      return `${pronunciationApi}${word}&le=id`
+      return `${pronunciationApi}${encodedWord}&le=id`
     default:
       return ''
   }
@@ -49,55 +50,14 @@ export default function usePronunciation(word: string, isLoop?: boolean) {
   const pronunciationConfig = useAtomValue(pronunciationConfigAtom)
   const loop = useMemo(() => (typeof isLoop === 'boolean' ? isLoop : pronunciationConfig.isLoop), [isLoop, pronunciationConfig.isLoop])
   const [isPlaying, setIsPlaying] = useState(false)
-  const [hasError, setHasError] = useState(false)
 
-  const soundSrc = generateWordSoundSrc(word, pronunciationConfig.type)
-
-  const [play, { stop, sound }] = useSound(soundSrc, {
+  const [play, { stop, sound }] = useSound(generateWordSoundSrc(word, pronunciationConfig.type), {
     html5: true,
     format: ['mp3'],
     loop,
     volume: pronunciationConfig.volume,
     rate: pronunciationConfig.rate,
-    onloaderror: (_id: any, err: any) => {
-      console.warn('Sound load error, falling back to system TTS', err)
-      setHasError(true)
-    },
-    onplayerror: (_id: any, err: any) => {
-      console.warn('Sound play error, falling back to system TTS', err)
-      setHasError(true)
-    }
   } as HookOptions)
-
-  // System TTS fallback
-  const speakSystem = useCallback(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(word)
-      utterance.lang = pronunciationConfig.type === 'uk' ? 'en-GB' : 'en-US' // Simple mapping
-      utterance.rate = pronunciationConfig.rate
-      utterance.volume = pronunciationConfig.volume
-      
-      utterance.onstart = () => setIsPlaying(true)
-      utterance.onend = () => setIsPlaying(false)
-      utterance.onerror = () => setIsPlaying(false)
-      
-      window.speechSynthesis.speak(utterance)
-    }
-  }, [word, pronunciationConfig])
-
-  const handlePlay = useCallback(() => {
-    if (hasError || !soundSrc) {
-      speakSystem()
-    } else {
-      // If we have a sound object but it's in error state, fallback
-      if (sound && sound.state() === 'unloaded' && hasError) {
-          speakSystem()
-          return
-      }
-      play()
-    }
-  }, [hasError, soundSrc, speakSystem, play, sound])
 
   useEffect(() => {
     if (!sound) return
@@ -112,13 +72,7 @@ export default function usePronunciation(word: string, isLoop?: boolean) {
     unListens.push(addHowlListener(sound, 'play', () => setIsPlaying(true)))
     unListens.push(addHowlListener(sound, 'end', () => setIsPlaying(false)))
     unListens.push(addHowlListener(sound, 'pause', () => setIsPlaying(false)))
-    unListens.push(addHowlListener(sound, 'playerror', () => {
-        setIsPlaying(false)
-        setHasError(true)
-    }))
-    unListens.push(addHowlListener(sound, 'loaderror', () => {
-        setHasError(true)
-    }))
+    unListens.push(addHowlListener(sound, 'playerror', () => setIsPlaying(false)))
 
     return () => {
       setIsPlaying(false)
@@ -127,12 +81,7 @@ export default function usePronunciation(word: string, isLoop?: boolean) {
     }
   }, [sound])
 
-  // Reset error when word changes
-  useEffect(() => {
-    setHasError(false)
-  }, [word, pronunciationConfig.type])
-
-  return { play: handlePlay, stop, isPlaying }
+  return { play, stop, isPlaying }
 }
 
 export function usePrefetchPronunciationSound(word: string | undefined) {
@@ -152,7 +101,8 @@ export function usePrefetchPronunciationSound(word: string | undefined) {
       audio.src = soundUrl
       audio.preload = 'auto'
 
-      // audio.crossOrigin = 'anonymous' // Remove this line to avoid CORS issues with Youdao API
+      // gpt 说这这两行能尽可能规避下载插件被触发问题。 本地测试不加也可以，考虑到别的插件可能有问题，所以加上保险
+      audio.crossOrigin = 'anonymous'
       audio.style.display = 'none'
 
       head.appendChild(audio)
