@@ -191,25 +191,38 @@ export function StudyTutorial() {
           </div>
 
           {/* Dismiss Button - Only show if in study mode, or show "Close" if in settings */}
-          <motion.button
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 1 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDismiss();
-            }}
-            className="absolute bottom-12 px-8 py-3 bg-white text-neutral-900 rounded-full font-bold shadow-xl hover:scale-105 active:scale-95 transition-transform pointer-events-auto flex items-center gap-2"
-          >
-            {isStudyPage ? (
-              <>
-                <span>开始练习</span>
-                <span className="text-neutral-400 text-sm font-normal">(Start)</span>
-              </>
-            ) : (
-              <span>关闭说明</span>
+          <div className="absolute bottom-8 flex flex-col items-center gap-4 w-full pointer-events-none">
+            <motion.button
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 1 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDismiss();
+              }}
+              className="px-8 py-3 bg-white text-neutral-900 rounded-full font-bold shadow-xl hover:scale-105 active:scale-95 transition-transform pointer-events-auto flex items-center gap-2"
+            >
+              {isStudyPage ? (
+                <>
+                  <span>开始练习</span>
+                  <span className="text-neutral-400 text-sm font-normal">(Start)</span>
+                </>
+              ) : (
+                <span>关闭说明</span>
+              )}
+            </motion.button>
+            
+            {isStudyPage && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5 }}
+                className="text-white/50 text-xs text-center"
+              >
+                可在 设置 - 交互设置 中再次查看此说明
+              </motion.div>
             )}
-          </motion.button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
