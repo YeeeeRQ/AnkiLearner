@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAtom } from 'jotai'
-import { useNavigate } from 'react-router-dom'
 import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom, showDifficultyButtonsAtom, showTutorialAtom } from '../state'
 import Select from '../components/Select'
 import Switch from '../components/Switch'
@@ -8,7 +7,6 @@ import ConfirmDialog from '../components/ConfirmDialog'
 import { db } from '../db'
 
 export default function Settings() {
-  const navigate = useNavigate()
   const [pronunciationConfig, setPronunciationConfig] = useAtom(pronunciationConfigAtom)
   const [soundEffectVolume, setSoundEffectVolume] = useAtom(soundEffectVolumeAtom)
   const [enableDrag, setEnableDrag] = useAtom(enableDragInteractionAtom)

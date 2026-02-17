@@ -89,7 +89,7 @@ export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDeb
         className="w-full h-full touch-none focus:outline-none relative"
         key={currentCard.id}
         style={{ x, y, rotate, opacity }}
-        drag
+        drag={enableDrag}
         dragConstraints={{ left: -3000, right: 3000, top: -3000, bottom: 3000 }}
         dragSnapToOrigin
         dragElastic={1}

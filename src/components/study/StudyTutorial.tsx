@@ -51,9 +51,7 @@ export function StudyTutorial() {
     neutral: { stroke: "rgba(156, 163, 175, 0.5)" }
   };
 
-  const LINE_LENGTH = 140; // Slightly longer for tutorial visibility
-  // Using 45 degree angle (equal x and y offset)
-  const OFFSET = LINE_LENGTH / Math.sqrt(2); 
+  const LINE_LENGTH = 140; // Slightly longer for tutorial visibility 
 
   return (
     <AnimatePresence>
