@@ -36,35 +36,41 @@ export default function Study() {
     handleDragEnd
   } = useCardDrag(handleRate)
 
-  // Dynamic card height calculation to avoid overlapping with controls
-  const controlsRef = useRef<HTMLDivElement>(null)
-  const [dynamicMaxHeight, setDynamicMaxHeight] = useState<number | undefined>(undefined)
+  // Adaptive card sizing
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [cardSize, setCardSize] = useState({ width: 320, height: 480 })
 
   useLayoutEffect(() => {
-    const calculateMaxHeight = () => {
-      if (!controlsRef.current) return
+    const updateSize = () => {
+      if (!containerRef.current) return
+      const { width, height } = containerRef.current.getBoundingClientRect()
       
-      const controlsRect = controlsRef.current.getBoundingClientRect()
-      const viewportHeight = window.innerHeight
+      // Target Aspect Ratio: 2:3 (320x480)
+      const aspectRatio = 320 / 480
+      const maxWidth = 320
+      const maxHeight = 480
       
-      // Card center is at 40% of viewport height (top-[40%])
-      const cardCenterY = viewportHeight * 0.4
+      // Margins
+      const marginX = 32
+      const marginY = 24
       
-      // Calculate available space below card center to the top of controls
-      // Subtract a safety margin (e.g., 24px)
-      const availableBottomSpace = controlsRect.top - cardCenterY - 24
+      const availableWidth = Math.min(width - marginX, maxWidth)
+      const availableHeight = Math.min(height - marginY, maxHeight)
       
-      if (availableBottomSpace > 0) {
-        // Max height is 2x the bottom space (since it's centered)
-        const maxHeight = availableBottomSpace * 2
-        setDynamicMaxHeight(maxHeight)
+      let w = availableWidth
+      let h = w / aspectRatio
+      
+      if (h > availableHeight) {
+        h = availableHeight
+        w = h * aspectRatio
       }
+      
+      setCardSize({ width: w, height: h })
     }
-
-    calculateMaxHeight()
-    window.addEventListener('resize', calculateMaxHeight)
     
-    return () => window.removeEventListener('resize', calculateMaxHeight)
+    updateSize()
+    window.addEventListener('resize', updateSize)
+    return () => window.removeEventListener('resize', updateSize)
   }, [])
 
   if (loading) return <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">加载中...</div>
@@ -103,15 +109,15 @@ export default function Study() {
   if (!currentCard) return null // Should be handled by loading or completion state
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden overscroll-none">
-      <div className="max-w-2xl mx-auto h-full flex flex-col relative pt-16 pb-8">
-        {/* Drag Path Visualization */}
-        <DragPathVisual dragPath={dragPath} />
+    <div className="fixed inset-0 w-full h-full overflow-hidden overscroll-none flex flex-col bg-neutral-50 dark:bg-neutral-900">
+      {/* Drag Path Visualization */}
+      <DragPathVisual dragPath={dragPath} />
 
-        {/* Tutorial Overlay */}
-        <StudyTutorial />
+      {/* Tutorial Overlay */}
+      <StudyTutorial />
 
-        {/* Header (Back & Progress) */}
+      {/* Header Spacer - reserves space for the absolute header */}
+      <div className="flex-none h-16 relative z-50 pointer-events-none">
         <StudyHeader 
           queueLength={queue.length}
           currentCard={currentCard}
@@ -121,20 +127,22 @@ export default function Study() {
           autoPlayAudio={autoPlayAudio}
           onToggleAutoPlay={() => setAutoPlayAudio(!autoPlayAudio)}
         />
+      </div>
 
-        {/* Card Area */}
-        <div className="relative w-full flex-1">
-          
-          {/* Previous Card (Left) */}
+      {/* Main Content Area - Flexible */}
+      <div ref={containerRef} className="flex-1 w-full relative flex items-center justify-center min-h-0">
+        
+        {/* Previous Card (Left) */}
         {history.length > 0 && (() => {
           const prevCard = history[history.length - 1];
           const prevSkin = getSkinForCard(prevCard.id);
           return (
             <div 
-              className="absolute left-1/2 top-[40%] transform -translate-x-[350px] -translate-y-1/2 -rotate-6 scale-90 opacity-60 pointer-events-none select-none z-0"
+              className="absolute left-1/2 top-1/2 opacity-60 pointer-events-none select-none z-0"
               style={{
-                ...cardDimensions,
-                maxHeight: dynamicMaxHeight ? Math.min(dynamicMaxHeight, 480) : cardDimensions.maxHeight
+                width: cardSize.width,
+                height: cardSize.height,
+                transform: 'translate(-50%, -50%) translateX(-120%) rotate(-6deg) scale(0.9)'
               }}
             >
               <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col items-center justify-center p-8 text-center ${prevSkin.bgClass} ${prevSkin.borderClass}`}>
@@ -156,10 +164,11 @@ export default function Study() {
           const nextSkin = getSkinForCard(nextCard.id);
           return (
             <div 
-              className="absolute left-1/2 top-[40%] transform translate-x-[350px] -translate-y-1/2 rotate-6 scale-90 opacity-60 pointer-events-none select-none z-0"
+              className="absolute left-1/2 top-1/2 opacity-60 pointer-events-none select-none z-0"
               style={{
-                ...cardDimensions,
-                maxHeight: dynamicMaxHeight ? Math.min(dynamicMaxHeight, 480) : cardDimensions.maxHeight
+                width: cardSize.width,
+                height: cardSize.height,
+                transform: 'translate(-50%, -50%) translateX(120%) rotate(6deg) scale(0.9)'
               }}
             >
               <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col items-center justify-center p-8 text-center ${nextSkin.bgClass} ${nextSkin.borderClass}`}>
@@ -183,7 +192,8 @@ export default function Study() {
           speak={speak}
           dragValues={{ x, y, rotate, opacity }}
           dragHandlers={{ onDrag: handleDrag, onDragEnd: handleDragEnd }}
-          dynamicMaxHeight={dynamicMaxHeight}
+          width={cardSize.width}
+          height={cardSize.height}
         />
       </div>
 
@@ -193,9 +203,7 @@ export default function Study() {
         setIsFlipped={setIsFlipped}
         handleRate={handleRate}
         highlightedRating={highlightedRating}
-        containerRef={controlsRef}
       />
-      </div>
     </div>
   )
 }

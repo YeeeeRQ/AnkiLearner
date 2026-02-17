@@ -21,7 +21,9 @@ interface FlashCardProps {
     onDrag: (event: any, info: any) => void
     onDragEnd: () => void
   }
-  dynamicMaxHeight?: number
+  width?: number | string
+  height?: number | string
+  className?: string
 }
 
 export const cardDimensions = {
@@ -31,7 +33,7 @@ export const cardDimensions = {
   maxHeight: '480px'
 }
 
-export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, dynamicMaxHeight }: FlashCardProps) {
+export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className }: FlashCardProps) {
   const { x, y, rotate, opacity } = dragValues
   
   // Randomly select a skin based on currentCard.id to ensure persistence during flip/re-render
@@ -74,10 +76,12 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
 
   return (
     <div 
-      className="z-10 absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2"
+      className={`z-10 relative touch-none select-none ${className || ''}`}
       style={{
-        ...cardDimensions,
-        maxHeight: dynamicMaxHeight ? Math.min(dynamicMaxHeight, 480) : cardDimensions.maxHeight
+        width: width ?? cardDimensions.width,
+        height: height ?? cardDimensions.height,
+        maxWidth: !width ? cardDimensions.maxWidth : undefined,
+        maxHeight: !height ? cardDimensions.maxHeight : undefined
       }}
     >
       <motion.div 
