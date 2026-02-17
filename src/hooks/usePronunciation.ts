@@ -102,7 +102,9 @@ export function usePrefetchPronunciationSound(word: string | undefined) {
       audio.preload = 'auto'
 
       // gpt 说这这两行能尽可能规避下载插件被触发问题。 本地测试不加也可以，考虑到别的插件可能有问题，所以加上保险
-      audio.crossOrigin = 'anonymous'
+      if (!import.meta.env.DEV) {
+        audio.crossOrigin = 'anonymous'
+      }
       audio.style.display = 'none'
 
       head.appendChild(audio)
