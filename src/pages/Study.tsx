@@ -118,7 +118,7 @@ export default function Study() {
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden overscroll-none flex flex-col bg-neutral-50 dark:bg-neutral-900">
       {/* Drag Path Visualization */}
-      <DragPathVisual dragPath={dragPath} />
+      <DragPathVisual dragPath={dragPath} highlightedRating={highlightedRating} />
 
       {/* Tutorial Overlay */}
       <StudyTutorial />

@@ -5,9 +5,10 @@ interface DragPath {
 
 interface DragVisualsProps {
   dragPath: DragPath | null
+  highlightedRating?: 1 | 2 | 3 | 4 | null
 }
 
-export function DragPathVisual({ dragPath }: DragVisualsProps) {
+export function DragPathVisual({ dragPath, highlightedRating }: DragVisualsProps) {
   if (!dragPath) return null
   
   const CANCEL_RADIUS = 60
@@ -16,16 +17,29 @@ export function DragPathVisual({ dragPath }: DragVisualsProps) {
   const distance = Math.sqrt(dx * dx + dy * dy)
   const isCancelled = distance < CANCEL_RADIUS
 
+  const getRatingInfo = (rating: number) => {
+    switch (rating) {
+      case 1: return { text: "重来", color: "rgba(239, 68, 68, 0.9)", bgColor: "rgba(254, 226, 226, 0.3)", stroke: "rgba(239, 68, 68, 0.8)" }
+      case 2: return { text: "困难", color: "rgba(249, 115, 22, 0.9)", bgColor: "rgba(255, 237, 213, 0.3)", stroke: "rgba(249, 115, 22, 0.8)" }
+      case 3: return { text: "一般", color: "rgba(34, 197, 94, 0.9)", bgColor: "rgba(220, 252, 231, 0.3)", stroke: "rgba(34, 197, 94, 0.8)" }
+      case 4: return { text: "简单", color: "rgba(59, 130, 246, 0.9)", bgColor: "rgba(219, 234, 254, 0.3)", stroke: "rgba(59, 130, 246, 0.8)" }
+      default: return null
+    }
+  }
+
+  const ratingInfo = highlightedRating ? getRatingInfo(highlightedRating) : null
+  const showRating = !isCancelled && ratingInfo
+
   return (
     <svg className="fixed inset-0 pointer-events-none z-50 overflow-visible">
-      {/* Cancel Zone */}
+      {/* Center Zone */}
       <g>
         <circle 
           cx={dragPath.start.x} 
           cy={dragPath.start.y} 
           r={CANCEL_RADIUS} 
-          fill={isCancelled ? "rgba(254, 202, 202, 0.3)" : "rgba(254, 226, 226, 0.1)"} 
-          stroke={isCancelled ? "rgba(239, 68, 68, 0.8)" : "rgba(252, 165, 165, 0.5)"} 
+          fill={isCancelled ? "rgba(254, 202, 202, 0.3)" : (showRating ? ratingInfo.bgColor : "rgba(254, 226, 226, 0.1)")} 
+          stroke={isCancelled ? "rgba(239, 68, 68, 0.8)" : (showRating ? ratingInfo.stroke : "rgba(252, 165, 165, 0.5)")} 
           strokeWidth="2" 
           strokeDasharray="4 4"
         />
@@ -42,6 +56,19 @@ export function DragPathVisual({ dragPath }: DragVisualsProps) {
             取消
           </text>
         )}
+        {showRating && (
+          <text 
+            x={dragPath.start.x} 
+            y={dragPath.start.y} 
+            textAnchor="middle" 
+            dominantBaseline="middle" 
+            fill={ratingInfo.color} 
+            className="font-bold font-sans"
+            style={{ fontSize: '16px' }}
+          >
+            {ratingInfo.text}
+          </text>
+        )}
       </g>
 
       {/* Drag Line */}
@@ -50,13 +77,13 @@ export function DragPathVisual({ dragPath }: DragVisualsProps) {
         y1={dragPath.start.y} 
         x2={dragPath.current.x} 
         y2={dragPath.current.y} 
-        stroke="rgba(96, 165, 250, 0.6)" 
+        stroke={showRating ? ratingInfo?.stroke : "rgba(96, 165, 250, 0.6)"} 
         strokeWidth="3" 
         strokeDasharray="8 4"
         strokeLinecap="round"
       />
-      <circle cx={dragPath.start.x} cy={dragPath.start.y} r="6" fill="rgba(96, 165, 250, 0.4)" stroke="rgba(96, 165, 250, 0.8)" strokeWidth="2" />
-      <circle cx={dragPath.current.x} cy={dragPath.current.y} r="8" fill="rgba(96, 165, 250, 1)" stroke="white" strokeWidth="2" />
+      <circle cx={dragPath.start.x} cy={dragPath.start.y} r="6" fill={showRating ? ratingInfo?.stroke : "rgba(96, 165, 250, 0.4)"} stroke={showRating ? ratingInfo?.stroke : "rgba(96, 165, 250, 0.8)"} strokeWidth="2" />
+      <circle cx={dragPath.current.x} cy={dragPath.current.y} r="8" fill={showRating ? ratingInfo?.color : "rgba(96, 165, 250, 1)"} stroke="white" strokeWidth="2" />
     </svg>
   )
 }
