@@ -3,7 +3,7 @@ import { SpeakerWaveIcon } from '@heroicons/react/24/outline'
 import { type Card } from '../../db'
 import { DebugOverlay } from './DragVisuals'
 import { getSkinForCard, type CardSkin } from './CardSkins'
-import { useMemo, useState, useEffect, useRef } from 'react'
+import { useMemo, useState, useEffect, useRef, memo } from 'react'
 import { useFlipSound } from '../../hooks/useFlipSound'
 
 interface FlashCardProps {
@@ -34,7 +34,7 @@ export const cardDimensions = {
   maxHeight: '480px'
 }
 
-export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className, enableDrag = true }: FlashCardProps) {
+export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className, enableDrag = true }: FlashCardProps) {
   const { x, y, rotate, opacity } = dragValues
   
   // Randomly select a skin based on currentCard.id to ensure persistence during flip/re-render
@@ -138,7 +138,7 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
       </motion.div>
     </div>
   )
-}
+})
 
 function AutoResizeText({ text, className, maxFontSize = 48, minFontSize = 16 }: { text: string, className?: string, maxFontSize?: number, minFontSize?: number }) {
   const containerRef = useRef<HTMLDivElement>(null)

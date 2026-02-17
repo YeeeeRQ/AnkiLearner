@@ -40,11 +40,12 @@ export function useStudySession() {
   }, [currentCard?.front, speakTTS])
 
   const { play: playPronunciation } = usePronunciation(currentCard?.front || '', {
-    onPlayError: handlePlayError
+    onPlayError: handlePlayError,
+    preload: autoPlayAudio
   })
   
   // Prefetch next card's audio
-  usePrefetchPronunciationSound(queue[1]?.front)
+  usePrefetchPronunciationSound(queue[1]?.front, autoPlayAudio)
 
   const playFlipSound = useFlipSound()
 

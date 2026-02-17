@@ -8,7 +8,7 @@ import { FlashCard, cardDimensions } from '../components/study/FlashCard'
 import { DragPathVisual } from '../components/study/DragVisuals'
 import { getSkinForCard } from '../components/study/CardSkins'
 import { StudyTutorial } from '../components/study/StudyTutorial'
-import { useRef, useState, useLayoutEffect } from 'react'
+import { useRef, useState, useLayoutEffect, useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import { enableDragInteractionAtom } from '../state'
 
@@ -39,6 +39,17 @@ export default function Study() {
     handleDrag,
     handleDragEnd
   } = useCardDrag(handleRate)
+
+  const dragValues = useMemo(() => ({ x, y, rotate, opacity }), [x, y, rotate, opacity])
+
+  const dragHandlers = useMemo(() => ({
+    onDrag: (e: any, info: any) => {
+      if (enableDrag && isFlipped) handleDrag(e, info)
+    },
+    onDragEnd: () => {
+      if (enableDrag && isFlipped) handleDragEnd()
+    }
+  }), [enableDrag, isFlipped, handleDrag, handleDragEnd])
 
   // Preview state
   const [previewMode, setPreviewMode] = useState<'none' | 'prev' | 'next'>('none')
@@ -241,15 +252,8 @@ export default function Study() {
           isFlipped={isFlipped}
           isDebug={isDebug}
           speak={speak}
-          dragValues={{ x, y, rotate, opacity }}
-          dragHandlers={{ 
-            onDrag: (e, info) => {
-              if (enableDrag && isFlipped) handleDrag(e, info)
-            }, 
-            onDragEnd: () => {
-              if (enableDrag && isFlipped) handleDragEnd()
-            } 
-          }}
+          dragValues={dragValues}
+          dragHandlers={dragHandlers}
           width={cardSize.width}
           height={cardSize.height}
           enableDrag={enableDrag}

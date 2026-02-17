@@ -35,6 +35,7 @@ export function generateWordSoundSrc(word: string, pronunciation: PronunciationT
 export interface UsePronunciationOptions {
   loop?: boolean
   onPlayError?: (err: any) => void
+  preload?: boolean
 }
 
 export default function usePronunciation(word: string, options?: UsePronunciationOptions | boolean) {
@@ -51,6 +52,13 @@ export default function usePronunciation(word: string, options?: UsePronunciatio
     }
     return undefined
   }, [options])
+  
+  const preload = useMemo(() => {
+    if (typeof options === 'object' && options !== null) {
+      return options.preload ?? true
+    }
+    return true
+  }, [options])
 
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -59,6 +67,7 @@ export default function usePronunciation(word: string, options?: UsePronunciatio
 
   useEffect(() => {
     if (!soundSrc) return
+    if (!preload) return
 
     const audio = new Audio(soundSrc)
     audioRef.current = audio
@@ -88,10 +97,31 @@ export default function usePronunciation(word: string, options?: UsePronunciatio
       audioRef.current = null
       setIsPlaying(false)
     }
-  }, [soundSrc, onPlayError])
+  }, [soundSrc, onPlayError, preload])
 
   const play = useCallback(() => {
-    const audio = audioRef.current
+    let audio = audioRef.current
+    
+    // Lazy initialization if not preloaded or if audio source changed (though useEffect handles src change cleanup)
+    if (!audio && soundSrc) {
+       audio = new Audio(soundSrc)
+       audioRef.current = audio
+       
+       const handlePlay = () => setIsPlaying(true)
+       const handleEnded = () => setIsPlaying(false)
+       const handlePause = () => setIsPlaying(false)
+       const handleError = (e: Event) => {
+         console.error('Audio play error:', e, 'Source:', soundSrc)
+         setIsPlaying(false)
+         onPlayError?.(e)
+       }
+
+       audio.addEventListener('play', handlePlay)
+       audio.addEventListener('ended', handleEnded)
+       audio.addEventListener('pause', handlePause)
+       audio.addEventListener('error', handleError)
+    }
+    
     if (!audio) return
 
     audio.loop = loop
@@ -104,7 +134,19 @@ export default function usePronunciation(word: string, options?: UsePronunciatio
       setIsPlaying(false)
       onPlayError?.(err)
     })
-  }, [loop, pronunciationConfig.volume, pronunciationConfig.rate, onPlayError])
+  }, [loop, pronunciationConfig.volume, pronunciationConfig.rate, onPlayError, soundSrc])
+  
+  // Cleanup effect for lazy-loaded audio
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.src = '' // Stop loading
+        audioRef.current = null
+        setIsPlaying(false)
+      }
+    }
+  }, [soundSrc]) // Cleanup whenever soundSrc changes, regardless of preload
 
   const stop = useCallback(() => {
     const audio = audioRef.current
@@ -118,11 +160,11 @@ export default function usePronunciation(word: string, options?: UsePronunciatio
   return { play, stop, isPlaying }
 }
 
-export function usePrefetchPronunciationSound(word: string | undefined) {
+export function usePrefetchPronunciationSound(word: string | undefined, enabled: boolean = true) {
   const pronunciationConfig = useAtomValue(pronunciationConfigAtom)
 
   useEffect(() => {
-    if (!word) return
+    if (!word || !enabled) return
 
     const soundUrl = generateWordSoundSrc(word, pronunciationConfig.type)
     if (soundUrl === '') return
@@ -139,5 +181,5 @@ export function usePrefetchPronunciationSound(word: string | undefined) {
       console.error('Prefetch failed:', err)
     })
 
-  }, [pronunciationConfig.type, word])
+  }, [pronunciationConfig.type, word, enabled])
 }

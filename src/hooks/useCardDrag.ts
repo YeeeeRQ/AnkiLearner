@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { useFocusSound } from './useFocusSound'
 
@@ -23,7 +23,7 @@ export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
   const rotate = useTransform(x, [-300, 300], [-20, 20])
   const opacity = useTransform(y, [0, 300], [1, 0.5])
 
-  const handleDrag = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDrag = useCallback((_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     // Calculate swipe state
     const screenHeight = window.innerHeight
     const cardCenterY = screenHeight * 0.4 // Based on top-[40%]
@@ -97,25 +97,37 @@ export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
       }
     }
 
-    setHighlightedRating(currentRating)
+    // Only update state if values have changed to prevent excessive re-renders
+    if (currentRating !== highlightedRating) {
+      setHighlightedRating(currentRating)
+    }
+    
+    // Throttle drag path updates for performance if needed, but for now just direct update
+    // We could check if distance change is significant enough
     setDragPath({
       start: { x: startX, y: startY },
       current: { x: info.point.x, y: info.point.y }
     })
-    setDebugStatus(`Swipe State: [${verticalState}] | [${directionState}]`)
-  }
+    
+    if (isDebug) {
+      setDebugStatus(`Swipe State: [${verticalState}] | [${directionState}]`)
+    }
+  }, [highlightedRating, isDebug])
 
-  const handleDragEnd = () => {
+  const handleDragEnd = useCallback(() => {
     // Execute rating logic if a rating is highlighted
     if (highlightedRating) {
-      handleRate(highlightedRating)
+      // Small delay to allow UI to settle before next card logic which might be heavy
+      requestAnimationFrame(() => {
+        handleRate(highlightedRating)
+      })
     }
 
     // Reset or handle end of drag if needed
     setDebugStatus("")
     setHighlightedRating(null)
     setDragPath(null)
-  }
+  }, [highlightedRating, handleRate])
 
   return {
     x, y, rotate, opacity,
