@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { db, type Card } from '../db'
 import { schedule } from '../scheduler'
+import { prefetchPhonetics } from '../utils/phoneticFetcher'
 
 export function useStudySession() {
   const { id } = useParams()
@@ -64,6 +65,14 @@ export function useStudySession() {
     }
     loadCards()
   }, [deckId, speak])
+
+  // Prefetch phonetics for upcoming cards
+  useEffect(() => {
+    if (queue.length > 0) {
+      // Prefetch next 5 cards in queue
+      prefetchPhonetics(queue.slice(0, 5));
+    }
+  }, [queue]);
 
   const handleRate = useCallback(async (rating: 1 | 2 | 3 | 4) => {
     if (!currentCard) return

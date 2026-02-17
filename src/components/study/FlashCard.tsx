@@ -1,9 +1,9 @@
 import { motion, MotionValue } from 'framer-motion'
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline'
-import { type Card } from '../../db'
+import { type Card, db } from '../../db'
 import { DebugOverlay } from './DragVisuals'
 import { getSkinForCard, type CardSkin } from './CardSkins'
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 interface FlashCardProps {
   currentCard: Card
@@ -35,6 +35,20 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
   // Randomly select a skin based on currentCard.id to ensure persistence during flip/re-render
   // but randomness across different cards
   const skin = useMemo(() => getSkinForCard(currentCard.id), [currentCard.id]);
+
+  // Phonetic state
+  const [phonetic, setPhonetic] = useState<string | undefined>(currentCard.phonetic);
+
+  useEffect(() => {
+    setPhonetic(currentCard.phonetic);
+    if (!currentCard.phonetic && currentCard.front) {
+      import('../../utils/phoneticFetcher').then(({ fetchPhoneticForCard }) => {
+        fetchPhoneticForCard(currentCard).then(text => {
+          if (text) setPhonetic(text);
+        });
+      });
+    }
+  }, [currentCard]);
 
   return (
     <div 
@@ -79,7 +93,7 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
               className="absolute inset-0 w-full h-full"
               style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
             >
-              <CardSide currentCard={currentCard} speak={speak} isBack={false} skin={skin} />
+              <CardSide currentCard={currentCard} speak={speak} isBack={false} skin={skin} phonetic={phonetic} />
             </div>
 
             {/* Back Face */}
@@ -87,7 +101,7 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
               className="absolute inset-0 w-full h-full"
               style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             >
-              <CardSide currentCard={currentCard} speak={speak} isBack={true} skin={skin} />
+              <CardSide currentCard={currentCard} speak={speak} isBack={true} skin={skin} phonetic={phonetic} />
             </div>
           </motion.div>
         </motion.div>
