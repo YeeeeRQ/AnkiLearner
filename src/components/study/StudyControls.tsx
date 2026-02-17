@@ -5,7 +5,7 @@ interface StudyControlsProps {
   setIsFlipped: (val: boolean) => void
   handleRate: (rating: 1 | 2 | 3 | 4) => void
   highlightedRating: 1 | 2 | 3 | 4 | null
-  containerRef?: React.RefObject<HTMLDivElement>
+  containerRef?: React.RefObject<HTMLDivElement | null>
 }
 
 export function StudyControls({ isFlipped, setIsFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {

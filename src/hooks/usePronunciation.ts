@@ -1,10 +1,21 @@
-import { pronunciationConfigAtom, PronunciationConfig } from '../state'
+import { pronunciationConfigAtom, type PronunciationConfig } from '../state'
 import { addHowlListener, noop, romajiToHiragana } from '../utils/sound'
 import { Howl } from 'howler'
 import { useAtomValue } from 'jotai'
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import useSound from 'use-sound'
-import { HookOptions } from 'use-sound/dist/types'
+
+interface HookOptions {
+  html5?: boolean
+  format?: string[]
+  loop?: boolean
+  volume?: number
+  rate?: number
+  xhr?: any
+  onloaderror?: (id: any, err: any) => void
+  onplayerror?: (id: any, err: any) => void
+  [key: string]: any
+}
 
 const pronunciationApi = 'https://dict.youdao.com/dictvoice?audio='
 
@@ -48,11 +59,11 @@ export default function usePronunciation(word: string, isLoop?: boolean) {
     loop,
     volume: pronunciationConfig.volume,
     rate: pronunciationConfig.rate,
-    onloaderror: (_id, err) => {
+    onloaderror: (_id: any, err: any) => {
       console.warn('Sound load error, falling back to system TTS', err)
       setHasError(true)
     },
-    onplayerror: (_id, err) => {
+    onplayerror: (_id: any, err: any) => {
       console.warn('Sound play error, falling back to system TTS', err)
       setHasError(true)
     }

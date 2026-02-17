@@ -1,6 +1,6 @@
 import { motion, MotionValue } from 'framer-motion'
 import { SpeakerWaveIcon } from '@heroicons/react/24/outline'
-import { type Card, db } from '../../db'
+import { type Card } from '../../db'
 import { DebugOverlay } from './DragVisuals'
 import { getSkinForCard, type CardSkin } from './CardSkins'
 import { useMemo, useState, useEffect } from 'react'
