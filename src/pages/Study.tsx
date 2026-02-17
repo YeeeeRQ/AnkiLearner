@@ -36,6 +36,9 @@ export default function Study() {
     handleDragEnd
   } = useCardDrag(handleRate)
 
+  // Preview state
+  const [previewMode, setPreviewMode] = useState<'none' | 'prev' | 'next'>('none')
+
   // Adaptive card sizing
   const containerRef = useRef<HTMLDivElement>(null)
   const [cardSize, setCardSize] = useState({ width: 320, height: 480 })
@@ -130,19 +133,39 @@ export default function Study() {
       </div>
 
       {/* Main Content Area - Flexible */}
-      <div ref={containerRef} className="flex-1 w-full relative flex items-center justify-center min-h-0">
+      <div 
+        ref={containerRef} 
+        className="flex-1 w-full relative flex items-center justify-center min-h-0"
+        onClick={() => {
+          if (previewMode !== 'none') {
+            setPreviewMode('none')
+          }
+        }}
+      >
         
         {/* Previous Card (Left) */}
         {history.length > 0 && (() => {
           const prevCard = history[history.length - 1];
           const prevSkin = getSkinForCard(prevCard.id);
+          const isPreview = previewMode === 'prev';
           return (
             <div 
-              className="absolute left-1/2 top-1/2 opacity-60 pointer-events-none select-none z-0"
+              className={`absolute left-1/2 top-1/2 transition-all duration-300 ease-out select-none ${isPreview ? 'z-30 opacity-100 cursor-zoom-out' : 'z-0 opacity-60 cursor-pointer pointer-events-auto'}`}
               style={{
                 width: cardSize.width,
                 height: cardSize.height,
-                transform: 'translate(-50%, -50%) translateX(-105%) rotate(-6deg) scale(0.9)'
+                transform: isPreview 
+                  ? 'translate(-50%, -50%) translateX(-10%) rotate(-2deg) scale(0.95)' 
+                  : 'translate(-50%, -50%) translateX(-105%) rotate(-6deg) scale(0.9)',
+                boxShadow: isPreview ? '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' : undefined
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (previewMode === 'none') {
+                  setPreviewMode('prev');
+                } else {
+                  setPreviewMode('none');
+                }
               }}
             >
               <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col items-center justify-center p-8 text-center ${prevSkin.bgClass} ${prevSkin.borderClass}`}>
@@ -162,13 +185,25 @@ export default function Study() {
         {queue.length > 1 && (() => {
           const nextCard = queue[1];
           const nextSkin = getSkinForCard(nextCard.id);
+          const isPreview = previewMode === 'next';
           return (
             <div 
-              className="absolute left-1/2 top-1/2 opacity-60 pointer-events-none select-none z-0"
+              className={`absolute left-1/2 top-1/2 transition-all duration-300 ease-out select-none ${isPreview ? 'z-30 opacity-100 cursor-zoom-out' : 'z-0 opacity-60 cursor-pointer pointer-events-auto'}`}
               style={{
                 width: cardSize.width,
                 height: cardSize.height,
-                transform: 'translate(-50%, -50%) translateX(105%) rotate(6deg) scale(0.9)'
+                transform: isPreview 
+                  ? 'translate(-50%, -50%) translateX(10%) rotate(2deg) scale(0.95)' 
+                  : 'translate(-50%, -50%) translateX(105%) rotate(6deg) scale(0.9)',
+                boxShadow: isPreview ? '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' : undefined
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (previewMode === 'none') {
+                  setPreviewMode('next');
+                } else {
+                  setPreviewMode('none');
+                }
               }}
             >
               <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col items-center justify-center p-8 text-center ${nextSkin.bgClass} ${nextSkin.borderClass}`}>
@@ -184,7 +219,18 @@ export default function Study() {
           )
         })()}
 
+        {/* Preview Overlay Indicator */}
+        {previewMode !== 'none' && (
+          <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-40 bg-black/70 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md animate-fadeIn pointer-events-none">
+            {previewMode === 'prev' ? '临时预览：上一张' : '临时预览：下一张'}
+          </div>
+        )}
+
         {/* Current Interactive Card */}
+        <div 
+          className={`transition-all duration-300 ${previewMode !== 'none' ? 'scale-90 opacity-40 blur-[1px]' : 'scale-100 opacity-100'}`}
+          style={{ pointerEvents: previewMode !== 'none' ? 'none' : 'auto' }}
+        >
         <FlashCard
           currentCard={currentCard}
           isFlipped={isFlipped}
@@ -195,6 +241,7 @@ export default function Study() {
           width={cardSize.width}
           height={cardSize.height}
         />
+        </div>
       </div>
 
       {/* Controls */}
