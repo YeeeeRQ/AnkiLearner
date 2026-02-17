@@ -1,11 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMotionValue, useTransform, type PanInfo } from 'framer-motion'
+import { useFocusSound } from './useFocusSound'
 
 export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
   const [isDebug, setIsDebug] = useState(false)
   const [debugStatus, setDebugStatus] = useState("")
   const [highlightedRating, setHighlightedRating] = useState<1 | 2 | 3 | 4 | null>(null)
   const [dragPath, setDragPath] = useState<{ start: {x: number, y: number}, current: {x: number, y: number} } | null>(null)
+  
+  // Sound effect for rating selection
+  const playFocusSound = useFocusSound()
+
+  useEffect(() => {
+    if (highlightedRating !== null) {
+      playFocusSound()
+    }
+  }, [highlightedRating, playFocusSound])
 
   // Framer Motion values for swipe
   const x = useMotionValue(0)

@@ -3,7 +3,8 @@ import { SpeakerWaveIcon } from '@heroicons/react/24/outline'
 import { type Card } from '../../db'
 import { DebugOverlay } from './DragVisuals'
 import { getSkinForCard, type CardSkin } from './CardSkins'
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
+import { useFlipSound } from '../../hooks/useFlipSound'
 
 interface FlashCardProps {
   currentCard: Card
@@ -39,6 +40,26 @@ export function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, 
 
   // Phonetic state
   const [phonetic, setPhonetic] = useState<string | undefined>(currentCard.phonetic);
+
+  // Flip sound effect
+  const playFlipSound = useFlipSound()
+  const prevIsFlipped = useRef(isFlipped)
+  const prevCardId = useRef(currentCard.id)
+
+  useEffect(() => {
+    // Skip sound if card changed
+    if (prevCardId.current !== currentCard.id) {
+      prevCardId.current = currentCard.id
+      prevIsFlipped.current = isFlipped
+      return
+    }
+
+    // Play sound if flip state changed
+    if (prevIsFlipped.current !== isFlipped) {
+      playFlipSound()
+      prevIsFlipped.current = isFlipped
+    }
+  }, [isFlipped, currentCard.id, playFlipSound])
 
   useEffect(() => {
     setPhonetic(currentCard.phonetic);

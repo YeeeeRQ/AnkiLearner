@@ -4,3 +4,9 @@ declare module 'use-sound' {
     options?: any
   ): [() => void, { stop: () => void; isPlaying: boolean; sound: any }];
 }
+
+declare module '*.mp3' {
+  const src: string;
+  export default src;
+}
+
