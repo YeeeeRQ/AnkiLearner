@@ -4,6 +4,7 @@ import { db, type Card } from '../db'
 import { schedule } from '../scheduler'
 import { prefetchPhonetics } from '../utils/phoneticFetcher'
 import usePronunciation, { usePrefetchPronunciationSound } from './usePronunciation'
+import { useFlipSound } from './useFlipSound'
 
 export function useStudySession() {
   const { id } = useParams()
@@ -20,6 +21,7 @@ export function useStudySession() {
   const [showComplete, setShowComplete] = useState(false)
 
   const { play: playPronunciation } = usePronunciation(currentCard?.front || '')
+  const playFlipSound = useFlipSound()
   
   // Prefetch next card's audio
   usePrefetchPronunciationSound(queue[1]?.front)
@@ -94,6 +96,8 @@ export function useStudySession() {
 
   const handleRate = useCallback(async (rating: 1 | 2 | 3 | 4) => {
     if (!currentCard) return
+    
+    playFlipSound()
 
     const now = Date.now()
     const { interval, ease, due } = schedule(currentCard, rating)
@@ -140,7 +144,7 @@ export function useStudySession() {
     } else {
       setShowComplete(true)
     }
-  }, [currentCard, queue, navigate, autoShowAnswer, autoPlayAudio, speak])
+  }, [currentCard, queue, navigate, autoShowAnswer, autoPlayAudio, speak, playFlipSound])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
