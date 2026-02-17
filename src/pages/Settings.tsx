@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { useAtom } from 'jotai'
 import { useNavigate } from 'react-router-dom'
 import { pronunciationConfigAtom, soundEffectVolumeAtom, enableDragInteractionAtom, showDifficultyButtonsAtom, showTutorialAtom } from '../state'
 import Select from '../components/Select'
 import Switch from '../components/Switch'
+import ConfirmDialog from '../components/ConfirmDialog'
+import { db } from '../db'
 
 export default function Settings() {
   const navigate = useNavigate()
@@ -11,6 +14,17 @@ export default function Settings() {
   const [enableDrag, setEnableDrag] = useAtom(enableDragInteractionAtom)
   const [showDifficultyButtons, setShowDifficultyButtons] = useAtom(showDifficultyButtonsAtom)
   const [, setShowTutorial] = useAtom(showTutorialAtom)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+
+  const handleClearData = async () => {
+    try {
+      await Promise.all([db.decks.clear(), db.cards.clear(), db.logs.clear()])
+      localStorage.clear()
+      window.location.reload()
+    } catch (error) {
+      console.error('Failed to clear data:', error)
+    }
+  }
 
   return (
     <div className="max-w-4xl">
@@ -144,16 +158,32 @@ export default function Settings() {
             </div>
           </div>
           
-          <div className="flex items-center justify-between py-4 border-t border-neutral-100 dark:border-neutral-700">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between py-4 border-t border-neutral-100 dark:border-neutral-700 gap-4">
             <div>
               <div className="font-medium text-neutral-900 dark:text-neutral-100">数据存储</div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">
+              <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                 数据存储在您的浏览器本地 (IndexedDB)。清除浏览器缓存可能会导致数据丢失。
               </div>
             </div>
+            <button
+              onClick={() => setIsConfirmOpen(true)}
+              className="w-full sm:w-auto px-4 py-2 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+            >
+              清除所有数据
+            </button>
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleClearData}
+        title="清除所有数据"
+        message="此操作将清除所有学习记录、卡片数据和设置。此操作不可恢复。确定要继续吗？"
+        confirmText="确认清除"
+        type="danger"
+      />
     </div>
   )
 }
