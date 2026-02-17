@@ -103,7 +103,7 @@ export default function Study() {
   if (!currentCard) return null // Should be handled by loading or completion state
 
   return (
-    <div className="max-w-2xl mx-auto h-dvh flex flex-col relative overscroll-none pt-16 pb-8">
+    <div className="max-w-2xl mx-auto h-full flex flex-col relative overflow-hidden overscroll-none pt-16 pb-8">
       {/* Drag Path Visualization */}
       <DragPathVisual dragPath={dragPath} />
 
