@@ -97,7 +97,10 @@ export function DragPathVisual({ dragPath, highlightedRating }: DragVisualsProps
         strokeDasharray="8 4"
         strokeLinecap="round"
       />
-      <circle cx={dragPath.start.x} cy={dragPath.start.y} r="6" fill={showRating ? ratingInfo?.stroke : "rgba(96, 165, 250, 0.4)"} stroke={showRating ? ratingInfo?.stroke : "rgba(96, 165, 250, 0.8)"} strokeWidth="2" />
+      {/* Hide start point circle when text is displayed to avoid overlap */}
+      {!isCancelled && !showRating && (
+        <circle cx={dragPath.start.x} cy={dragPath.start.y} r="6" fill="rgba(96, 165, 250, 0.4)" stroke="rgba(96, 165, 250, 0.8)" strokeWidth="2" />
+      )}
       <circle cx={dragPath.current.x} cy={dragPath.current.y} r="8" fill={showRating ? ratingInfo?.color : "rgba(96, 165, 250, 1)"} stroke="white" strokeWidth="2" />
     </svg>
   )
