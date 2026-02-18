@@ -28,11 +28,9 @@ export const soundEffectVolumeAtom = atomWithStorage<number>('sound-effect-volum
 // Drag interaction config
 export const enableDragInteractionAtom = atomWithStorage<boolean>('enable-drag-interaction', true)
 
-const isMobile = typeof window !== 'undefined' && (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768)
-
 // Show difficulty buttons config
-// Default to hidden on mobile, visible on desktop
-export const showDifficultyButtonsAtom = atomWithStorage<boolean>('show-difficulty-buttons', !isMobile)
+// Default to visible on both mobile and desktop
+export const showDifficultyButtonsAtom = atomWithStorage<boolean>('show-difficulty-buttons', true)
 
 // Tutorial visibility
 export const showTutorialAtom = atom<boolean>(false)
