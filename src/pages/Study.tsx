@@ -264,7 +264,6 @@ export default function Study() {
       {/* Controls */}
       <StudyControls 
         isFlipped={isFlipped}
-        setIsFlipped={setIsFlipped}
         handleRate={handleRate}
         highlightedRating={highlightedRating}
       />

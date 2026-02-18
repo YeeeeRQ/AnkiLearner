@@ -1,16 +1,14 @@
-import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
 import { enableDragInteractionAtom, showDifficultyButtonsAtom } from '../../state'
 
 interface StudyControlsProps {
   isFlipped: boolean
-  setIsFlipped: (val: boolean) => void
   handleRate: (rating: 1 | 2 | 3 | 4) => void
   highlightedRating: 1 | 2 | 3 | 4 | null
   containerRef?: React.RefObject<HTMLDivElement | null>
 }
 
-export function StudyControls({ isFlipped, setIsFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {
+export function StudyControls({ isFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {
   const enableDrag = useAtomValue(enableDragInteractionAtom)
   const showDifficultyButtons = useAtomValue(showDifficultyButtonsAtom)
   
