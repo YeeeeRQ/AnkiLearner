@@ -207,7 +207,7 @@ function AutoResizeText({ text, className, maxFontSize = 48, minFontSize = 16 }:
   }, [text, maxFontSize, minFontSize])
 
   return (
-    <div ref={containerRef} className={`w-full flex justify-center overflow-hidden ${className}`}>
+    <div ref={containerRef} className={`w-full flex justify-center overflow-hidden pointer-events-none ${className}`}>
       <span 
         ref={textRef} 
         style={{ fontSize: `${fontSize}px`, whiteSpace: 'nowrap', display: 'inline-block' }}
