@@ -262,7 +262,7 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic, onFlip }: { curr
             onPointerDown={(e) => e.stopPropagation()}
             onPointerDownCapture={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className={`relative z-50 inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
+            className={`relative z-50 inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer focus:outline-none ${skin.textClass}`}
             title="Play Audio"
           >
             <SpeakerWaveIcon className="w-5 h-5" />
@@ -292,7 +292,7 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic, onFlip }: { curr
             onFlip?.();
           }}
           onPointerDownCapture={(e) => e.stopPropagation()}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer focus:outline-none ${skin.textClass}`}
         >
           <ArrowsRightLeftIcon className="w-4 h-4" />
           <span className="text-sm font-medium">翻转</span>
