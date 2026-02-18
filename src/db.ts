@@ -64,18 +64,37 @@ class AnkiDB extends Dexie {
 export const db = new AnkiDB();
 
 // Helper to add initial deck if empty
+let isInitializing = false;
 export async function initDB() {
-  const count = await db.decks.count();
-  if (count === 0) {
-    // Import CET-4 Deck from public/dicts using fetcher
-    // We use the first available dictionary as default
-    const defaultDict = dictionaries[0];
-    if (defaultDict) {
-      try {
-        await fetchAndImportDeck(defaultDict.url, defaultDict.name, defaultDict.description);
-      } catch (e) {
-        console.error("Failed to load initial deck:", e);
+  // Prevent double initialization in Strict Mode or rapid re-renders
+  if (isInitializing) return;
+
+  // Check if we've already initialized the app before
+  const isInitialized = localStorage.getItem('app_initialized');
+  if (isInitialized === 'true') return;
+
+  try {
+    isInitializing = true;
+    const count = await db.decks.count();
+    
+    if (count === 0) {
+      // Import CET-4 Deck from public/dicts using fetcher
+      // We use the first available dictionary as default
+      const defaultDict = dictionaries[0];
+      if (defaultDict) {
+        try {
+          await fetchAndImportDeck(defaultDict.url, defaultDict.name, defaultDict.description);
+          // Mark as initialized only after successful import
+          localStorage.setItem('app_initialized', 'true');
+        } catch (e) {
+          console.error("Failed to load initial deck:", e);
+        }
       }
+    } else {
+      // If there are already decks (e.g. from a previous session where we didn't set the flag), mark as initialized
+      localStorage.setItem('app_initialized', 'true');
     }
+  } finally {
+    isInitializing = false;
   }
 }
