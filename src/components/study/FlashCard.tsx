@@ -259,7 +259,9 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic, onFlip }: { curr
               console.log('Play audio clicked:', currentCard.front);
               speak(currentCard.front); 
             }}
+            onPointerDown={(e) => e.stopPropagation()}
             onPointerDownCapture={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
             className={`relative z-50 inline-flex items-center justify-center p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
             title="Play Audio"
           >
@@ -289,6 +291,7 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic, onFlip }: { curr
             e.stopPropagation();
             onFlip?.();
           }}
+          onPointerDownCapture={(e) => e.stopPropagation()}
           className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
         >
           <ArrowsRightLeftIcon className="w-4 h-4" />
