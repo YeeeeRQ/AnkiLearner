@@ -10,6 +10,7 @@ import { StudyTutorial } from '../components/study/StudyTutorial'
 import { useRef, useState, useLayoutEffect, useMemo, useCallback } from 'react'
 import { useAtomValue } from 'jotai'
 import { enableDragInteractionAtom } from '../state'
+import { type PanInfo } from 'framer-motion'
 
 export default function Study() {
   const enableDrag = useAtomValue(enableDragInteractionAtom)
@@ -29,6 +30,19 @@ export default function Study() {
     setAutoPlayAudio
   } = useStudySession()
 
+  const handleFlip = useCallback(() => {
+    setIsFlipped(prev => !prev)
+  }, [setIsFlipped])
+
+  // Flip Hint State
+  const [showFlipHint, setShowFlipHint] = useState(false)
+  
+  const handleInvalidDrag = useCallback(() => {
+    setShowFlipHint(true)
+    const timer = setTimeout(() => setShowFlipHint(false), 3000)
+    return () => clearTimeout(timer)
+  }, [])
+
   const {
     x, y, rotate, opacity,
     isDebug,
@@ -37,22 +51,18 @@ export default function Study() {
     dragPath,
     handleDrag,
     handleDragEnd
-  } = useCardDrag(handleRate)
+  } = useCardDrag(handleRate, isFlipped, handleInvalidDrag)
 
   const dragValues = useMemo(() => ({ x, y, rotate, opacity }), [x, y, rotate, opacity])
 
   const dragHandlers = useMemo(() => ({
-    onDrag: (e: any, info: any) => {
-      if (enableDrag && isFlipped) handleDrag(e, info)
+    onDrag: (e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      if (enableDrag) handleDrag(e, info)
     },
     onDragEnd: () => {
-      if (enableDrag && isFlipped) handleDragEnd()
+      if (enableDrag) handleDragEnd()
     }
-  }), [enableDrag, isFlipped, handleDrag, handleDragEnd])
-
-  const handleFlip = useCallback(() => {
-    setIsFlipped(prev => !prev)
-  }, [setIsFlipped])
+  }), [enableDrag, handleDrag, handleDragEnd])
 
   // Preview state
   const [previewMode, setPreviewMode] = useState<'none' | 'prev' | 'next'>('none')
@@ -137,6 +147,15 @@ export default function Study() {
 
       {/* Tutorial Overlay */}
       <StudyTutorial />
+
+      {/* Hint Toast */}
+      {showFlipHint && (
+        <div className="absolute top-24 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
+           <div className="bg-black/80 text-white px-6 py-3 rounded-full shadow-lg backdrop-blur-sm text-sm font-medium border border-white/10">
+             请先翻转卡片查看答案，然后再进行评分
+           </div>
+        </div>
+      )}
 
       {/* Header Spacer - reserves space for the absolute header */}
       <div className="flex-none h-16 relative z-50 pointer-events-none">

@@ -1,12 +1,20 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { useFocusSound } from './useFocusSound'
 
-export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
+export function useCardDrag(
+  handleRate: (rating: 1 | 2 | 3 | 4) => void,
+  isFlipped: boolean,
+  onInvalidDrag?: () => void
+) {
   const [isDebug, setIsDebug] = useState(false)
   const [debugStatus, setDebugStatus] = useState("")
   const [highlightedRating, setHighlightedRating] = useState<1 | 2 | 3 | 4 | null>(null)
   const [dragPath, setDragPath] = useState<{ start: {x: number, y: number}, current: {x: number, y: number} } | null>(null)
+  
+  // Track invalid drag attempts on question side
+  const dragAttempts = useRef(0)
+  const lastDragTime = useRef(0)
   
   // Sound effect for rating selection
   const playFocusSound = useFocusSound()
@@ -98,8 +106,16 @@ export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
     }
 
     // Only update state if values have changed to prevent excessive re-renders
-    if (currentRating !== highlightedRating) {
-      setHighlightedRating(currentRating)
+    // IMPORTANT: When !isFlipped, we FORCE highlightedRating to be null to hide visual cues
+    if (isFlipped) {
+      if (currentRating !== highlightedRating) {
+        setHighlightedRating(currentRating)
+      }
+    } else {
+      // If not flipped, ensure no rating is highlighted
+      if (highlightedRating !== null) {
+        setHighlightedRating(null)
+      }
     }
     
     // Throttle drag path updates for performance if needed, but for now just direct update
@@ -112,10 +128,36 @@ export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
     if (isDebug) {
       setDebugStatus(`Swipe State: [${verticalState}] | [${directionState}]`)
     }
-  }, [highlightedRating, isDebug])
+  }, [highlightedRating, isDebug, isFlipped])
 
   const handleDragEnd = useCallback(() => {
-    // Execute rating logic if a rating is highlighted
+    // If user tries to rate while not flipped (on Question side)
+    if (!isFlipped) {
+      const now = Date.now()
+      
+      // Reset count if more than 2 seconds have passed since last attempt
+      if (now - lastDragTime.current > 2000) {
+        dragAttempts.current = 0
+      }
+      
+      dragAttempts.current += 1
+      lastDragTime.current = now
+
+      // If frequent attempts (>= 2), trigger callback
+      if (dragAttempts.current >= 2) {
+        onInvalidDrag?.()
+        // Reset to prevent spamming immediately again
+        dragAttempts.current = 0
+      }
+      
+      // Cancel the action - reset state without rating
+      setDebugStatus("")
+      setHighlightedRating(null)
+      setDragPath(null)
+      return
+    }
+
+    // Execute rating logic if a rating is highlighted and card is flipped
     if (highlightedRating) {
       // Small delay to allow UI to settle before next card logic which might be heavy
       requestAnimationFrame(() => {
@@ -127,7 +169,7 @@ export function useCardDrag(handleRate: (rating: 1 | 2 | 3 | 4) => void) {
     setDebugStatus("")
     setHighlightedRating(null)
     setDragPath(null)
-  }, [highlightedRating, handleRate])
+  }, [highlightedRating, handleRate, isFlipped, onInvalidDrag])
 
   return {
     x, y, rotate, opacity,
