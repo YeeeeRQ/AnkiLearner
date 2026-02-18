@@ -21,7 +21,7 @@ export async function fetchAndImportDeck(url: string, deckName: string, descript
       name: deckName,
       description: description,
       created_at: Date.now(),
-      autoShowAnswer: true,
+      autoShowAnswer: false,
       autoPlayAudio: true
     })
 
