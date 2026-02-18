@@ -256,6 +256,7 @@ export default function Study() {
           width={cardSize.width}
           height={cardSize.height}
           enableDrag={enableDrag}
+          onFlip={() => setIsFlipped(!isFlipped)}
         />
         </div>
       </div>

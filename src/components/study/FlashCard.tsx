@@ -1,5 +1,5 @@
 import { motion, MotionValue } from 'framer-motion'
-import { SpeakerWaveIcon } from '@heroicons/react/24/outline'
+import { SpeakerWaveIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import { type Card } from '../../db'
 import { DebugOverlay } from './DragVisuals'
 import { getSkinForCard, type CardSkin } from './CardSkins'
@@ -34,7 +34,7 @@ export const cardDimensions = {
   maxHeight: '480px'
 }
 
-export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className, enableDrag = true }: FlashCardProps) {
+export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDebug, speak, dragValues, dragHandlers, width, height, className, enableDrag = true, onFlip }: FlashCardProps & { onFlip?: () => void }) {
   const { x, y, rotate, opacity } = dragValues
   
   // Randomly select a skin based on currentCard.id to ensure persistence during flip/re-render
@@ -128,7 +128,7 @@ export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDeb
                 pointerEvents: isFlipped ? 'none' : 'auto'
               }}
             >
-              <CardSide currentCard={currentCard} speak={speak} isBack={false} skin={skin} phonetic={phonetic} />
+              <CardSide currentCard={currentCard} speak={speak} isBack={false} skin={skin} phonetic={phonetic} onFlip={onFlip} />
             </div>
 
             {/* Back Face */}
@@ -142,7 +142,7 @@ export const FlashCard = memo(function FlashCard({ currentCard, isFlipped, isDeb
                 pointerEvents: isFlipped ? 'auto' : 'none'
               }}
             >
-              <CardSide currentCard={currentCard} speak={speak} isBack={true} skin={skin} phonetic={phonetic} />
+              <CardSide currentCard={currentCard} speak={speak} isBack={true} skin={skin} phonetic={phonetic} onFlip={onFlip} />
             </div>
           </motion.div>
         </motion.div>
@@ -220,7 +220,7 @@ function AutoResizeText({ text, className, maxFontSize = 48, minFontSize = 16 }:
   )
 }
 
-function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard: Card, speak: (text: string) => void, isBack: boolean, skin: CardSkin, phonetic?: string }) {
+function CardSide({ currentCard, speak, isBack, skin, phonetic, onFlip }: { currentCard: Card, speak: (text: string) => void, isBack: boolean, skin: CardSkin, phonetic?: string, onFlip?: () => void }) {
   return (
     <div className={`w-full h-full rounded-3xl shadow-lg border flex flex-col overflow-hidden relative ${skin.bgClass} ${skin.borderClass}`}>
       
@@ -280,6 +280,20 @@ function CardSide({ currentCard, speak, isBack, skin, phonetic }: { currentCard:
             </p>
           </div>
         )}
+      </div>
+
+      {/* Flip Button at Bottom Center */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50">
+         <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onFlip?.();
+          }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm cursor-pointer ${skin.textClass}`}
+        >
+          <ArrowsRightLeftIcon className="w-4 h-4" />
+          <span className="text-sm font-medium">翻转</span>
+        </button>
       </div>
 
       {/* Card Footer Gradient Bar (Optional, keeping consistent with skin) */}

@@ -54,27 +54,6 @@ export function StudyControls({ isFlipped, setIsFlipped, handleRate, highlighted
             isHighlighted={highlightedRating === 4}
           />
         </div>
-
-        <button 
-          onClick={() => setIsFlipped(!isFlipped)}
-          className={`w-full max-w-xl md:max-w-md font-semibold py-3 md:py-2.5 rounded-2xl md:rounded-xl shadow-lg transition transform active:scale-95 border-2 focus:outline-none flex flex-col items-center justify-center gap-0.5 ${
-            isFlipped 
-              ? 'bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/50' 
-              : 'bg-blue-600 hover:bg-blue-500 text-white border-transparent'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <ArrowsRightLeftIcon 
-              className={`w-5 h-5 md:w-4.5 md:h-4.5 transition-transform duration-500`} 
-              style={{ 
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                perspective: '1000px'
-              }}
-            />
-            <span className="text-lg md:text-base tracking-wide">翻转</span>
-          </div>
-          <span className="text-xs opacity-70 font-mono font-normal tracking-wider md:text-[10px]">Space</span>
-        </button>
       </div>
     </div>
   )
