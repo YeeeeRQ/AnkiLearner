@@ -7,7 +7,7 @@ import { FlashCard } from '../components/study/FlashCard'
 import { DragPathVisual } from '../components/study/DragVisuals'
 import { getSkinForCard } from '../components/study/CardSkins'
 import { StudyTutorial } from '../components/study/StudyTutorial'
-import { useRef, useState, useLayoutEffect, useMemo } from 'react'
+import { useRef, useState, useLayoutEffect, useMemo, useCallback } from 'react'
 import { useAtomValue } from 'jotai'
 import { enableDragInteractionAtom } from '../state'
 
@@ -49,6 +49,10 @@ export default function Study() {
       if (enableDrag && isFlipped) handleDragEnd()
     }
   }), [enableDrag, isFlipped, handleDrag, handleDragEnd])
+
+  const handleFlip = useCallback(() => {
+    setIsFlipped(prev => !prev)
+  }, [setIsFlipped])
 
   // Preview state
   const [previewMode, setPreviewMode] = useState<'none' | 'prev' | 'next'>('none')
@@ -256,7 +260,7 @@ export default function Study() {
           width={cardSize.width}
           height={cardSize.height}
           enableDrag={enableDrag}
-          onFlip={() => setIsFlipped(!isFlipped)}
+          onFlip={handleFlip}
         />
         </div>
       </div>

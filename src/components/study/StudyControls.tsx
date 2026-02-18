@@ -1,4 +1,5 @@
 import { useAtomValue } from 'jotai'
+import { memo } from 'react'
 import { enableDragInteractionAtom, showDifficultyButtonsAtom } from '../../state'
 
 interface StudyControlsProps {
@@ -8,7 +9,7 @@ interface StudyControlsProps {
   containerRef?: React.RefObject<HTMLDivElement | null>
 }
 
-export function StudyControls({ isFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {
+export const StudyControls = memo(function StudyControls({ isFlipped, handleRate, highlightedRating, containerRef }: StudyControlsProps) {
   const enableDrag = useAtomValue(enableDragInteractionAtom)
   const showDifficultyButtons = useAtomValue(showDifficultyButtonsAtom)
   
@@ -55,7 +56,7 @@ export function StudyControls({ isFlipped, handleRate, highlightedRating, contai
       </div>
     </div>
   )
-}
+})
 
 function RatingButton({ id, label, sub, color, onClick, isHighlighted }: { id?: string, label: string, sub: string, color: string, onClick: () => void, isHighlighted?: boolean }) {
   return (
